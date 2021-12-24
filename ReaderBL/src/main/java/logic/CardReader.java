@@ -1,10 +1,7 @@
-package net.exoa.logic;
+package logic;
 
 import org.w3c.dom.CharacterData;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -16,8 +13,6 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
-
-import static java.lang.Integer.getInteger;
 
 public class CardReader {
 

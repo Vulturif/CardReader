@@ -7,6 +7,7 @@
     <groupId>net.exoa</groupId>
     <artifactId>CardReader</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
     <properties>
         <maven.compiler.source>13</maven.compiler.source>
@@ -25,4 +26,9 @@
             <version>5.1.0</version>
         </dependency>
     </dependencies>
+
+    <modules>
+        <module>ReaderUI</module>
+        <module>ReaderBL</module>
+    </modules>
 </project>

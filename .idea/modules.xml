@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/CardReader.iml" filepath="$PROJECT_DIR$/CardReader.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ReaderBL/ReaderBL.iml" filepath="$PROJECT_DIR$/ReaderBL/ReaderBL.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ReaderUI/ReaderUI.iml" filepath="$PROJECT_DIR$/ReaderUI/ReaderUI.iml" />
     </modules>
   </component>
 </project>
