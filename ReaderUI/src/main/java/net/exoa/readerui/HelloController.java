@@ -1,15 +1,25 @@
 package net.exoa.readerui;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.geometry.Insets;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
+import net.exoa.logic.Input;
 import net.exoa.logic.CardReader;
+import net.exoa.logic.Output;
 import net.exoa.logic.Person;
 
 import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
+import java.io.IOException;
 import java.util.List;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
@@ -18,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 
 public class HelloController {
 
+    public static final String SEPPERATOR = ";";
     @FXML
     private Label lblStatus;
     @FXML
@@ -38,19 +49,80 @@ public class HelloController {
     private ChoiceBox<String> cbGeschlecht;
     @FXML
     private ChoiceBox<CardTerminal> cbReader;
-
+    @FXML
+    private ChoiceBox<String> cbGenesen;
+    @FXML
+    private ChoiceBox<String> cbJUJ;
+    @FXML
+    private DatePicker dpImpfdatum;
+    @FXML
+    private ChoiceBox<String> cbImpfserie;
+    @FXML
+    private ChoiceBox<String> cbBriefkontakt;
+    @FXML
+    private TextField tfEmail;
+    @FXML
+    private TextField tfTelefon;
+    @FXML
+    private TextField tfAdresszusatz;
+    @FXML
+    private TextField tfCharge;
+    @FXML
+    private CheckBox cbAutoSave;
+    @FXML
+    private Button btnSave;
+    @FXML
+    private TableView<PersonTableData> tvCurrent;
+    @FXML
+    private TableColumn<PersonTableData, SimpleStringProperty> c1;
+    @FXML
+    private TableColumn<PersonTableData, SimpleStringProperty> c2;
+    @FXML
+    private TableColumn<PersonTableData, SimpleStringProperty> c3;
+    @FXML
+    private TableColumn<PersonTableData, SimpleStringProperty> c4;
+    @FXML
+    private TableColumn<PersonTableData, SimpleStringProperty> c5;
+    @FXML
+    private TableColumn<PersonTableData, SimpleStringProperty> c6;
+    @FXML
+    private TableColumn<PersonTableData, SimpleStringProperty> c7;
+    @FXML
+    private TableColumn<PersonTableData, SimpleStringProperty> c8;
+    @FXML
+    private TableColumn<PersonTableData, SimpleStringProperty> c9;
+    @FXML
+    private TableColumn<PersonTableData, SimpleStringProperty> c10;
+    @FXML
+    private TableColumn<PersonTableData, SimpleStringProperty> c11;
+    @FXML
+    private TableColumn<PersonTableData, SimpleStringProperty> c12;
+    @FXML
+    private TableColumn<PersonTableData, SimpleStringProperty> c13;
+    @FXML
+    private TableColumn<PersonTableData, SimpleStringProperty> c14;
+    @FXML
+    private TableColumn<PersonTableData, SimpleStringProperty> c15;
+    @FXML
+    private TableColumn<PersonTableData, SimpleStringProperty> c16;
+    @FXML
+    private TableColumn<PersonTableData, SimpleStringProperty> c17;
 
     ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
-
     CardReader reader = new CardReader();
+    Output out = new Output();
+    Input in = new Input();
+
     List<CardTerminal> cardTerminals;
     CardTerminal cardTerminal;
     TimerTask task;
-    Person currentPerson;
+
+    private final ObservableList<PersonTableData> personTableData = FXCollections.observableArrayList();
+
     boolean reRead = true;
 
-    public HelloController() throws CardException {
+    public HelloController() throws CardException, IOException {
         buildTask();
         cardTerminals = reader.listTerminals();
         cardTerminal = cardTerminals.get(0);
@@ -63,18 +135,27 @@ public class HelloController {
                 Platform.runLater(() -> {
                     try {
                         boolean isCardPresent = cbReader.getValue().isCardPresent();
-                        setStatus(isCardPresent);
+
+                        if (reRead) {
+                            setStatus(isCardPresent);
+                        }
+
                         if (isCardPresent) {
                             if (reRead) {
-                                readCard();
+                                try {
+                                    readCard();
+                                } catch (Exception e) {
+                                    lblStatus.setText("Fehler beim Lesen der Karte!");
+                                    lblStatus.setBackground(new Background(new BackgroundFill(Color.RED, new CornerRadii(10.0), new Insets(-5.0))));
+                                }
                             }
                             reRead = false;
                         } else {
                             reRead = true;
-                            if (currentPerson != null) {
-//                                clear();
+                            if (cbAutoSave.isSelected()) {
+                                write();
+                                clear();
                             }
-                            currentPerson = null;
                         }
                     } catch (CardException e) {
                         e.printStackTrace();
@@ -97,15 +178,12 @@ public class HelloController {
     }
 
     private void readCard() {
-        if (currentPerson != null) {
-            return;
-        }
-        currentPerson = reader.readCardInTerminal(cardTerminal);
+        Person currentPerson = reader.readCardInTerminal(cardTerminal);
 
         cbGeschlecht.setValue(currentPerson.getGeschlecht());
         tfVorname.setText(currentPerson.getVorname());
         tfName.setText(currentPerson.getName());
-        tfGeburtsdatum.setText(currentPerson.getGeburtsdatum());
+        tfGeburtsdatum.setText(reanrangeDate(currentPerson.getGeburtsdatum()));
         tfPlz.setText(currentPerson.getPlz());
         tfOrt.setText(currentPerson.getOrt());
         tfStrasse.setText(currentPerson.getStrasse());
@@ -122,15 +200,104 @@ public class HelloController {
         cbGeschlecht.getItems().add("W");
         cbGeschlecht.getItems().add("D");
 
+        cbBriefkontakt.getItems().add("");
+        cbBriefkontakt.getItems().add("0");
+        cbBriefkontakt.getItems().add("1");
+
+        cbImpfserie.getItems().add("");
+        cbImpfserie.getItems().add("1");
+        cbImpfserie.getItems().add("2");
+        cbImpfserie.getItems().add("3");
+
+        cbJUJ.getItems().add("");
+        cbJUJ.getItems().add("0");
+        cbJUJ.getItems().add("1");
+
+        cbGenesen.getItems().add("");
+        cbGenesen.getItems().add("0");
+        cbGenesen.getItems().add("1");
+
         executor.scheduleAtFixedRate(task, 3000, 500, TimeUnit.MILLISECONDS);
+
+        c1.setCellValueFactory(new PropertyValueFactory<>("Anrede"));
+        c2.setCellValueFactory(new PropertyValueFactory<>("Vorname"));
+        c3.setCellValueFactory(new PropertyValueFactory<>("Nachname"));
+        c4.setCellValueFactory(new PropertyValueFactory<>("Geburtsdatum"));
+        c5.setCellValueFactory(new PropertyValueFactory<>("Plz"));
+        c6.setCellValueFactory(new PropertyValueFactory<>("Ort"));
+        c7.setCellValueFactory(new PropertyValueFactory<>("Strasse"));
+        c8.setCellValueFactory(new PropertyValueFactory<>("StrasseNr"));
+        c9.setCellValueFactory(new PropertyValueFactory<>("Adresszusatz"));
+        c10.setCellValueFactory(new PropertyValueFactory<>("Telefon"));
+        c11.setCellValueFactory(new PropertyValueFactory<>("Email"));
+        c12.setCellValueFactory(new PropertyValueFactory<>("Briefkontakt"));
+        c13.setCellValueFactory(new PropertyValueFactory<>("Impfserie"));
+        c14.setCellValueFactory(new PropertyValueFactory<>("Charge"));
+        c15.setCellValueFactory(new PropertyValueFactory<>("Impfdatum"));
+        c16.setCellValueFactory(new PropertyValueFactory<>("ErstimpfungJuJ"));
+        c17.setCellValueFactory(new PropertyValueFactory<>("Genesenen_Bescheinigung"));
+        tvCurrent.setItems(personTableData);
+
+        readCSV();
+    }
+
+    private void readCSV() {
+        List<String[]> lines = in.readData();
+        lines.forEach(line -> personTableData.add(new PersonTableData(line)));
     }
 
 
     private void setStatus(boolean b) {
         if (b) {
             lblStatus.setText("Karte gefunden!");
+            lblStatus.setBackground(new Background(new BackgroundFill(Color.GREEN, new CornerRadii(10.0), new Insets(-5.0))));
         } else {
             lblStatus.setText("Keine Karte gefunden!");
+            lblStatus.setBackground(new Background(new BackgroundFill(Color.YELLOW, new CornerRadii(10.0), new Insets(-5.0))));
         }
+    }
+
+    @FXML
+    public void writePerson() {
+        write();
+    }
+
+    private void write() {
+        String newLine = cbGeschlecht.getValue() + SEPPERATOR
+                + tfVorname.getText() + SEPPERATOR
+                + tfName.getText() + SEPPERATOR
+                + tfGeburtsdatum.getText() + SEPPERATOR
+                + tfPlz.getText() + SEPPERATOR
+                + tfOrt.getText() + SEPPERATOR
+                + tfStrasse.getText() + SEPPERATOR
+                + tfHausnummer.getText() + SEPPERATOR
+                + tfAdresszusatz.getText() + SEPPERATOR
+                + tfTelefon.getText() + SEPPERATOR
+                + tfEmail.getText() + SEPPERATOR
+                + cbBriefkontakt.getValue() + SEPPERATOR
+                + cbImpfserie.getValue() + SEPPERATOR
+                + tfCharge.getText() + SEPPERATOR
+                + dpImpfdatum.getValue() + SEPPERATOR
+                + cbJUJ.getValue() + SEPPERATOR
+                + cbGenesen.getValue() + "\n";
+
+        newLine = newLine.replaceAll("null", "");
+        out.write(newLine);
+        personTableData.add(new PersonTableData(newLine.split(";", -1)));
+    }
+
+    private String reanrangeDate(String date) {
+        String[] split = date.split("");
+        return split[6] + split[7] + "." + split[4] + split[5] + "." + split[0] + split[1] + split[2] + split[3];
+    }
+
+    @FXML
+    public void checkAutoSave() {
+        btnSave.setDisable(cbAutoSave.isSelected());
+    }
+
+    @FXML
+    public void close() {
+        Platform.exit();
     }
 }

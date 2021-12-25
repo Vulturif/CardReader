@@ -1,61 +1,33 @@
 package net.exoa.logic;
 
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFFont;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class Output {
 
-    public static void write(Person person) throws IOException {
-        XSSFWorkbook workbook = new XSSFWorkbook();
+    public static final String HEADER = "Anrede (M,F,D);Vorname;Nachname;Geburtsdatum;Plz;Ort;Strasse;StrasseNr;Adresszusatz;Telefon;Email;Briefkontakt (1,0);Impfserie(1,2,3);Charge;Impfdatum(TT.MM.JJJJ H24:MI);Erstimpfung Johnson&Johnson (1,0);Genesenen-Bescheinigung (1,0)\n";
 
-        Sheet sheet = workbook.createSheet("Persons");
-        sheet.setColumnWidth(0, 6000);
-        sheet.setColumnWidth(1, 4000);
+    File file = new File("D:\\tmp\\bla.csv");
 
-        Row header = sheet.createRow(0);
+    public Output() throws IOException {
+        if (!file.exists()) {
+            file.createNewFile();
+            write(HEADER);
+        }
+    }
 
-        CellStyle headerStyle = workbook.createCellStyle();
-        headerStyle.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
-        headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-
-        XSSFFont font = workbook.createFont();
-        font.setFontName("Arial");
-        font.setFontHeightInPoints((short) 16);
-        font.setBold(true);
-        headerStyle.setFont(font);
-
-        Cell headerCell = header.createCell(0);
-        headerCell.setCellValue("Name");
-        headerCell.setCellStyle(headerStyle);
-
-        headerCell = header.createCell(1);
-        headerCell.setCellValue("Age");
-        headerCell.setCellStyle(headerStyle);
-
-        CellStyle style = workbook.createCellStyle();
-        style.setWrapText(true);
-
-        Row row = sheet.createRow(2);
-        Cell cell = row.createCell(0);
-        cell.setCellValue(person.getName() + ", " + person.getVorname());
-        cell.setCellStyle(style);
-
-        cell = row.createCell(1);
-        cell.setCellValue(person.getGeburtsdatum());
-        cell.setCellStyle(style);
-
-        File currDir = new File("C:\\Users\\a772000\\IdeaProjects\\CardReader\\temp\\");
-        String path = currDir.getAbsolutePath();
-        String fileLocation = path + "\\temp.xlsx";
-
-        FileOutputStream outputStream = new FileOutputStream(fileLocation);
-        workbook.write(outputStream);
-        workbook.close();
+    public void write(String newLine) {
+        try (FileWriter pw = new FileWriter(file,true)) {
+            pw.append(newLine);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

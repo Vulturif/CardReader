@@ -31,10 +31,7 @@ public class CardReader {
     }
 
     public Person readCardInTerminal(CardTerminal terminal) {
-        /* we use the default TerminalFactory */
         try {
-            /* We can have multiple terminals on one System, so we get a list */
-
             Card card = terminal.connect("T=1");
             CardChannel channel = card.getBasicChannel();
 
@@ -55,8 +52,6 @@ public class CardReader {
             card.disconnect(false);
 
             return parseXml(pd_data);
-
-
         } catch (CardException | IOException | ParserConfigurationException | SAXException e) {
             e.printStackTrace();
         }
@@ -85,7 +80,6 @@ public class CardReader {
             }
         }
 
-        System.out.println("Data: " + buffer);
         return buffer.toString();
     }
 
