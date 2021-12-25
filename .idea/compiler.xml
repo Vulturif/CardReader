@@ -21,6 +21,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="CardReader" options="--add-modules java.smartcardio" />
       <module name="ReaderBL" options="--add-modules java.smartcardio" />
+      <module name="ReaderUI" options="--add-modules java.smartcardio" />
     </option>
   </component>
 </project>

@@ -1,4 +1,4 @@
-package logic;
+package net.exoa.logic;
 
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.*;
@@ -20,51 +20,47 @@ public class CardReader {
     private static final byte[] SELECT_HCA = new byte[]{0x00, (byte) 0xA4, 0x04, 0x0C, 0x06, (byte) 0xD2, 0x76, 0x00, 0x00, 0x01, 0x02};
     private static final byte[] SELECT_FILE_PD = new byte[]{(byte) 0x00, (byte) 0xB0, (byte) 0x81,(byte) 0X00,(byte) 0x00, 0x00, 0x00};
 
-    public static void main(String[] args) {
-        listCounted();
+    private final TerminalFactory factory;
+
+    public CardReader() {
+        factory = TerminalFactory.getDefault();
     }
 
-    public static void listCounted() {
+    public List<CardTerminal> listTerminals() throws CardException {
+        return factory.terminals().list();
+    }
+
+    public Person readCardInTerminal(CardTerminal terminal) {
         /* we use the default TerminalFactory */
-        TerminalFactory factory = TerminalFactory.getDefault();
         try {
             /* We can have multiple terminals on one System, so we get a list */
-            List<CardTerminal> terminals = factory.terminals().list();
 
-            for (CardTerminal terminal : terminals) {
-                System.out.println("——————————————–");
-                System.out.println("Card_Terminal_Name: "+ terminal.getName());
-                System.out.println("Card_in_Terminal_present: "+terminal.isCardPresent());
-                System.out.println("——————————————–");
-                Card card = terminal.connect("T=1");
-                CardChannel channel = card.getBasicChannel();
+            Card card = terminal.connect("T=1");
+            CardChannel channel = card.getBasicChannel();
 
-                System.out.println("Card_Info: "+ card);
+            System.out.println("Card_Info: "+ card);
 
+            CommandAPDU SELECT_MF_APDU = new CommandAPDU(SELECT_MF);
+            CommandAPDU SELECT_HCA_APDU = new CommandAPDU(SELECT_HCA);
+            CommandAPDU SELECT_FILE_PD_APDU = new CommandAPDU(SELECT_FILE_PD);
 
+            channel.transmit(SELECT_MF_APDU);
+            channel.transmit(SELECT_HCA_APDU);
+            ResponseAPDU rPD = channel.transmit(SELECT_FILE_PD_APDU);
 
-                CommandAPDU SELECT_MF_APDU = new CommandAPDU(SELECT_MF);
-                CommandAPDU SELECT_HCA_APDU = new CommandAPDU(SELECT_HCA);
-                CommandAPDU SELECT_FILE_PD_APDU = new CommandAPDU(SELECT_FILE_PD);
+            checkResponseCode(Integer.toHexString(rPD.getSW()));
 
-                channel.transmit(SELECT_MF_APDU);
-                channel.transmit(SELECT_HCA_APDU);
-                ResponseAPDU rPD = channel.transmit(SELECT_FILE_PD_APDU);
+            String pd_data = DecodeVD(rPD.getData());
 
-                checkResponseCode(Integer.toHexString(rPD.getSW()));
+            card.disconnect(false);
 
-                String pd_data = DecodeVD(rPD.getData());
+            return parseXml(pd_data);
 
-                card.disconnect(false);
-
-                Person person = parseXml(pd_data);
-
-                Output.write(person);
-            }
 
         } catch (CardException | IOException | ParserConfigurationException | SAXException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     private static String DecodeVD(byte[] bytes) throws IOException {

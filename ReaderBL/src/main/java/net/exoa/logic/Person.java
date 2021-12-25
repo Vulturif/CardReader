@@ -1,4 +1,4 @@
-package logic;
+package net.exoa.logic;
 
 public class Person {
     private String name;

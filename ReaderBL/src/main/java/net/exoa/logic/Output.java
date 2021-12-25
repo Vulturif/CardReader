@@ -1,4 +1,4 @@
-package logic;
+package net.exoa.logic;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
