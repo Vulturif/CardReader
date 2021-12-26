@@ -116,6 +116,7 @@
                     <Button fx:id="btnSave" layoutX="672.0" layoutY="477.0" mnemonicParsing="false" onAction="#writePerson" prefHeight="25.0" prefWidth="114.0" text="Speichern" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0" />
                     <Separator layoutX="300.0" layoutY="500.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
                     <CheckBox fx:id="cbAutoSave" layoutX="10.0" layoutY="474.0" mnemonicParsing="false" onAction="#checkAutoSave" text="Automatisch beim Entfernen der Karte Speichern" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="10.0" />
+               <Button layoutX="538.0" layoutY="470.0" mnemonicParsing="false" onAction="#cleanUp" prefHeight="25.0" prefWidth="121.0" text="Felder leeren" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="140.0" />
                 </AnchorPane>
             </Tab>
             <Tab closable="false" text="Aktueller Inhalt CSV">

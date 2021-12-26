@@ -188,7 +188,7 @@ public class HelloController {
                             reRead = true;
                             if (cbAutoSave.isSelected()) {
                                 write();
-                                clear();
+                                cleanUp();
                             }
                         }
                     } catch (CardException | IOException e) {
@@ -206,7 +206,8 @@ public class HelloController {
         };
     }
 
-    private void clear() {
+    @FXML
+    public void cleanUp() {
         cbGeschlecht.setValue(null);
         tfVorname.setText(null);
         tfName.setText(null);
@@ -355,7 +356,7 @@ public class HelloController {
     @FXML
     public void writePerson() throws IOException {
         write();
-        clear();
+        cleanUp();
     }
 
     private void write() throws IOException {
