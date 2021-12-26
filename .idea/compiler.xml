@@ -11,11 +11,11 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="CardReader" target="13" />
+      <module name="CardReader" target="17" />
       <module name="jlink" target="13" />
       <module name="Out" target="13" />
-      <module name="ReaderBL" target="13" />
-      <module name="ReaderUI" target="13" />
+      <module name="ReaderBL" target="17" />
+      <module name="ReaderUI" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
