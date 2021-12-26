@@ -29,13 +29,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import java.util.concurrent.atomic.AtomicReference;
 import  java.util.prefs.*;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class HelloController {
 
-    public static final String SEPPERATOR = ";";
     @FXML
     private Label lblStatus;
     @FXML
@@ -119,8 +117,6 @@ public class HelloController {
 
     ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
 
-    private final String PREF_NAME = "path_to_csv";
-
     CardReader reader = new CardReader();
     Output out = new Output();
     Input in = new Input();
@@ -145,6 +141,7 @@ public class HelloController {
             cardTerminal = cardTerminals.get(0);
         }
 
+        String PREF_NAME = "path_to_csv";
         String filePath = prefs.get(PREF_NAME, "C:\\tmp");
         File bla = new File(filePath);
         if (!bla.exists()) {
@@ -162,9 +159,14 @@ public class HelloController {
                 Platform.runLater(() -> {
                     try {
                         if (cbReader.getValue() == null) {
-                            lblStatus.setText("Kein Kartenleser vorhanden!");
-                            lblStatus.setBackground(new Background(new BackgroundFill(Color.RED, new CornerRadii(10.0), new Insets(-5.0))));
-                            return;
+                            cardTerminals = reader.listTerminals();
+                            if(!cardTerminals.isEmpty()) {
+                                cbReader.setValue(cardTerminals.get(0));
+                            } else {
+                                lblStatus.setText("Kein Kartenleser vorhanden!");
+                                lblStatus.setBackground(new Background(new BackgroundFill(Color.RED, new CornerRadii(10.0), new Insets(-5.0))));
+                                return;
+                            }
                         }
                         boolean isCardPresent = cbReader.getValue().isCardPresent();
 
@@ -289,23 +291,23 @@ public class HelloController {
         c16.setCellValueFactory(new PropertyValueFactory<>("ErstimpfungJuJ"));
         c17.setCellValueFactory(new PropertyValueFactory<>("Genesenen_Bescheinigung"));
 
-        c1.setCellFactory(TextFieldTableCell.forTableColumn());
-        c2.setCellFactory(TextFieldTableCell.forTableColumn());
-        c3.setCellFactory(TextFieldTableCell.forTableColumn());
-        c4.setCellFactory(TextFieldTableCell.forTableColumn());
-        c5.setCellFactory(TextFieldTableCell.forTableColumn());
-        c6.setCellFactory(TextFieldTableCell.forTableColumn());
-        c7.setCellFactory(TextFieldTableCell.forTableColumn());
-        c8.setCellFactory(TextFieldTableCell.forTableColumn());
-        c9.setCellFactory(TextFieldTableCell.forTableColumn());
-        c10.setCellFactory(TextFieldTableCell.forTableColumn());
-        c11.setCellFactory(TextFieldTableCell.forTableColumn());
-        c12.setCellFactory(TextFieldTableCell.forTableColumn());
-        c13.setCellFactory(TextFieldTableCell.forTableColumn());
-        c14.setCellFactory(TextFieldTableCell.forTableColumn());
-        c15.setCellFactory(TextFieldTableCell.forTableColumn());
-        c16.setCellFactory(TextFieldTableCell.forTableColumn());
-        c17.setCellFactory(TextFieldTableCell.forTableColumn());
+        setCellFactory(c1);
+        setCellFactory(c2);
+        setCellFactory(c3);
+        setCellFactory(c4);
+        setCellFactory(c5);
+        setCellFactory(c6);
+        setCellFactory(c7);
+        setCellFactory(c8);
+        setCellFactory(c9);
+        setCellFactory(c10);
+        setCellFactory(c11);
+        setCellFactory(c12);
+        setCellFactory(c13);
+        setCellFactory(c14);
+        setCellFactory(c15);
+        setCellFactory(c16);
+        setCellFactory(c17);
 
         c1.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setAnrede(t.getNewValue()));
         c2.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setVorname(t.getNewValue()));
@@ -328,6 +330,10 @@ public class HelloController {
         tvCurrent.setItems(personTableData);
 
         readCSV();
+    }
+
+    private void setCellFactory(TableColumn<PersonTableData, String> c) {
+        c.setCellFactory(TextFieldTableCell.forTableColumn());
     }
 
     private void readCSV() {
