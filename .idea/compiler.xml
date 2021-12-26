@@ -12,6 +12,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="CardReader" target="13" />
+      <module name="jlink" target="13" />
       <module name="Out" target="13" />
       <module name="ReaderBL" target="13" />
       <module name="ReaderUI" target="13" />

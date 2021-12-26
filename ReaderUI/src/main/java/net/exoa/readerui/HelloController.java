@@ -19,13 +19,18 @@ import net.exoa.logic.Person;
 
 import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
+import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import  java.util.prefs.*;
+
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class HelloController {
 
     public static final String SEPPERATOR = ";";
@@ -110,22 +115,37 @@ public class HelloController {
 
     ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
+    private final String PREF_NAME = "path_to_csv";
+
     CardReader reader = new CardReader();
     Output out = new Output();
     Input in = new Input();
+
+    File file = new File("D:\\tmp\\bla.csv");
 
     List<CardTerminal> cardTerminals;
     CardTerminal cardTerminal;
     TimerTask task;
 
+    Preferences prefs = Preferences.userNodeForPackage(net.exoa.readerui.HelloController.class);
+
     private final ObservableList<PersonTableData> personTableData = FXCollections.observableArrayList();
 
     boolean reRead = true;
 
-    public HelloController() throws CardException, IOException {
+    public HelloController() throws CardException {
         buildTask();
         cardTerminals = reader.listTerminals();
         cardTerminal = cardTerminals.get(0);
+
+        String filePath = prefs.get(PREF_NAME, "C:\\tmp");
+        File bla = new File(filePath);
+        if (!bla.exists()) {
+            bla.mkdir();
+        }
+
+        LocalDate current_date = LocalDate.now();
+        file = new File(filePath + String.format("\\Impfung_%d%02d%02d_HHMM.csv", current_date.getYear()-2000, current_date.getMonthValue(), current_date.getDayOfMonth()));
     }
 
     private void buildTask() {
@@ -157,7 +177,7 @@ public class HelloController {
                                 clear();
                             }
                         }
-                    } catch (CardException e) {
+                    } catch (CardException | IOException e) {
                         e.printStackTrace();
                     }
                 });
@@ -242,7 +262,7 @@ public class HelloController {
     }
 
     private void readCSV() {
-        List<String[]> lines = in.readData();
+        List<String[]> lines = in.readData(file);
         lines.forEach(line -> personTableData.add(new PersonTableData(line)));
     }
 
@@ -258,11 +278,11 @@ public class HelloController {
     }
 
     @FXML
-    public void writePerson() {
+    public void writePerson() throws IOException {
         write();
     }
 
-    private void write() {
+    private void write() throws IOException {
         String newLine = cbGeschlecht.getValue() + SEPPERATOR
                 + tfVorname.getText() + SEPPERATOR
                 + tfName.getText() + SEPPERATOR
@@ -282,7 +302,7 @@ public class HelloController {
                 + cbGenesen.getValue() + "\n";
 
         newLine = newLine.replaceAll("null", "");
-        out.write(newLine);
+        out.write(file, newLine);
         personTableData.add(new PersonTableData(newLine.split(";", -1)));
     }
 
@@ -299,5 +319,10 @@ public class HelloController {
     @FXML
     public void close() {
         Platform.exit();
+    }
+
+    @FXML
+    public void openSettings() {
+
     }
 }

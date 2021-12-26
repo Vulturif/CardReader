@@ -10,6 +10,7 @@ module net.exoa.readerui {
     //requires eu.hansolo.tilesfx;
     requires net.exoa.readerbl;
     requires java.smartcardio;
+    requires java.prefs;
 
     opens net.exoa.readerui to javafx.fxml;
     exports net.exoa.readerui;

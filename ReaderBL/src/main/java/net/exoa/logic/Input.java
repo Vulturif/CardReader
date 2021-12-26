@@ -6,11 +6,9 @@ import java.util.List;
 
 public class Input {
 
-    File file = new File("D:\\tmp\\bla.csv");
-
-    public List<String[]> readData() {
+    public List<String[]> readData(File file) {
         if (!file.exists()) {
-            return null;
+            return new ArrayList<>();
         }
 
         boolean firstLine = true;
