@@ -1,13 +1,13 @@
 package net.exoa.readerui;
 
 import javafx.application.Platform;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -22,12 +22,14 @@ import javax.smartcardio.CardTerminal;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import java.util.concurrent.atomic.AtomicReference;
 import  java.util.prefs.*;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -79,41 +81,43 @@ public class HelloController {
     @FXML
     private TableView<PersonTableData> tvCurrent;
     @FXML
-    private TableColumn<PersonTableData, SimpleStringProperty> c1;
+    private TextField tfTime;
     @FXML
-    private TableColumn<PersonTableData, SimpleStringProperty> c2;
+    private TableColumn<PersonTableData, String> c1;
     @FXML
-    private TableColumn<PersonTableData, SimpleStringProperty> c3;
+    private TableColumn<PersonTableData, String> c2;
     @FXML
-    private TableColumn<PersonTableData, SimpleStringProperty> c4;
+    private TableColumn<PersonTableData, String> c3;
     @FXML
-    private TableColumn<PersonTableData, SimpleStringProperty> c5;
+    private TableColumn<PersonTableData, String> c4;
     @FXML
-    private TableColumn<PersonTableData, SimpleStringProperty> c6;
+    private TableColumn<PersonTableData, String> c5;
     @FXML
-    private TableColumn<PersonTableData, SimpleStringProperty> c7;
+    private TableColumn<PersonTableData, String> c6;
     @FXML
-    private TableColumn<PersonTableData, SimpleStringProperty> c8;
+    private TableColumn<PersonTableData, String> c7;
     @FXML
-    private TableColumn<PersonTableData, SimpleStringProperty> c9;
+    private TableColumn<PersonTableData, String> c8;
     @FXML
-    private TableColumn<PersonTableData, SimpleStringProperty> c10;
+    private TableColumn<PersonTableData, String> c9;
     @FXML
-    private TableColumn<PersonTableData, SimpleStringProperty> c11;
+    private TableColumn<PersonTableData, String> c10;
     @FXML
-    private TableColumn<PersonTableData, SimpleStringProperty> c12;
+    private TableColumn<PersonTableData, String> c11;
     @FXML
-    private TableColumn<PersonTableData, SimpleStringProperty> c13;
+    private TableColumn<PersonTableData, String> c12;
     @FXML
-    private TableColumn<PersonTableData, SimpleStringProperty> c14;
+    private TableColumn<PersonTableData, String> c13;
     @FXML
-    private TableColumn<PersonTableData, SimpleStringProperty> c15;
+    private TableColumn<PersonTableData, String> c14;
     @FXML
-    private TableColumn<PersonTableData, SimpleStringProperty> c16;
+    private TableColumn<PersonTableData, String> c15;
     @FXML
-    private TableColumn<PersonTableData, SimpleStringProperty> c17;
+    private TableColumn<PersonTableData, String> c16;
+    @FXML
+    private TableColumn<PersonTableData, String> c17;
 
-    ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+    ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
 
     private final String PREF_NAME = "path_to_csv";
 
@@ -121,11 +125,12 @@ public class HelloController {
     Output out = new Output();
     Input in = new Input();
 
-    File file = new File("D:\\tmp\\bla.csv");
+    File file;
 
     List<CardTerminal> cardTerminals;
     CardTerminal cardTerminal;
     TimerTask task;
+    TimerTask saveTask;
 
     Preferences prefs = Preferences.userNodeForPackage(net.exoa.readerui.HelloController.class);
 
@@ -133,10 +138,12 @@ public class HelloController {
 
     boolean reRead = true;
 
-    public HelloController() throws CardException {
+    public HelloController() {
         buildTask();
         cardTerminals = reader.listTerminals();
-        cardTerminal = cardTerminals.get(0);
+        if(!cardTerminals.isEmpty()) {
+            cardTerminal = cardTerminals.get(0);
+        }
 
         String filePath = prefs.get(PREF_NAME, "C:\\tmp");
         File bla = new File(filePath);
@@ -154,6 +161,11 @@ public class HelloController {
             public void run() {
                 Platform.runLater(() -> {
                     try {
+                        if (cbReader.getValue() == null) {
+                            lblStatus.setText("Kein Kartenleser vorhanden!");
+                            lblStatus.setBackground(new Background(new BackgroundFill(Color.RED, new CornerRadii(10.0), new Insets(-5.0))));
+                            return;
+                        }
                         boolean isCardPresent = cbReader.getValue().isCardPresent();
 
                         if (reRead) {
@@ -184,6 +196,12 @@ public class HelloController {
             }
         };
 
+        saveTask = new TimerTask() {
+            @Override
+            public void run() {
+                saveData();
+            }
+        };
     }
 
     private void clear() {
@@ -195,11 +213,24 @@ public class HelloController {
         tfOrt.setText(null);
         tfStrasse.setText(null);
         tfHausnummer.setText(null);
+        tfAdresszusatz.setText(null);
+        tfTelefon.setText(null);
+        tfEmail.setText(null);
+        cbBriefkontakt.setValue("");
+        cbImpfserie.setValue("");
+        tfCharge.setText(null);
+        dpImpfdatum.setValue(null);
+        tfTime.setText(null);
+        cbJUJ.setValue(null);
+        cbGenesen.setValue(null);
     }
 
     private void readCard() {
-        Person currentPerson = reader.readCardInTerminal(cardTerminal);
+        Person currentPerson = reader.readCardInTerminal(cbReader.getValue());
 
+        if(currentPerson == null) {
+            return;
+        }
         cbGeschlecht.setValue(currentPerson.getGeschlecht());
         tfVorname.setText(currentPerson.getVorname());
         tfName.setText(currentPerson.getName());
@@ -212,7 +243,7 @@ public class HelloController {
 
     @FXML
     public void initialize() {
-        cbReader.setValue(cardTerminals.get(0));
+        cbReader.setValue(cardTerminal);
         cardTerminals.forEach(terminal -> cbReader.getItems().add(terminal));
 
         cbGeschlecht.getItems().add("");
@@ -238,6 +269,7 @@ public class HelloController {
         cbGenesen.getItems().add("1");
 
         executor.scheduleAtFixedRate(task, 3000, 500, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(saveTask, 1, 5, TimeUnit.MINUTES);
 
         c1.setCellValueFactory(new PropertyValueFactory<>("Anrede"));
         c2.setCellValueFactory(new PropertyValueFactory<>("Vorname"));
@@ -256,6 +288,43 @@ public class HelloController {
         c15.setCellValueFactory(new PropertyValueFactory<>("Impfdatum"));
         c16.setCellValueFactory(new PropertyValueFactory<>("ErstimpfungJuJ"));
         c17.setCellValueFactory(new PropertyValueFactory<>("Genesenen_Bescheinigung"));
+
+        c1.setCellFactory(TextFieldTableCell.forTableColumn());
+        c2.setCellFactory(TextFieldTableCell.forTableColumn());
+        c3.setCellFactory(TextFieldTableCell.forTableColumn());
+        c4.setCellFactory(TextFieldTableCell.forTableColumn());
+        c5.setCellFactory(TextFieldTableCell.forTableColumn());
+        c6.setCellFactory(TextFieldTableCell.forTableColumn());
+        c7.setCellFactory(TextFieldTableCell.forTableColumn());
+        c8.setCellFactory(TextFieldTableCell.forTableColumn());
+        c9.setCellFactory(TextFieldTableCell.forTableColumn());
+        c10.setCellFactory(TextFieldTableCell.forTableColumn());
+        c11.setCellFactory(TextFieldTableCell.forTableColumn());
+        c12.setCellFactory(TextFieldTableCell.forTableColumn());
+        c13.setCellFactory(TextFieldTableCell.forTableColumn());
+        c14.setCellFactory(TextFieldTableCell.forTableColumn());
+        c15.setCellFactory(TextFieldTableCell.forTableColumn());
+        c16.setCellFactory(TextFieldTableCell.forTableColumn());
+        c17.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        c1.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setAnrede(t.getNewValue()));
+        c2.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setVorname(t.getNewValue()));
+        c3.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setNachname(t.getNewValue()));
+        c4.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setGeburtsdatum(t.getNewValue()));
+        c5.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setPlz(t.getNewValue()));
+        c6.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setOrt(t.getNewValue()));
+        c7.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setStrasse(t.getNewValue()));
+        c8.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setStrasseNr(t.getNewValue()));
+        c9.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setAdresszusatz(t.getNewValue()));
+        c10.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setTelefon(t.getNewValue()));
+        c11.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setEmail(t.getNewValue()));
+        c12.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setBriefkontakt(t.getNewValue()));
+        c13.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setImpfserie(t.getNewValue()));
+        c14.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setCharge(t.getNewValue()));
+        c15.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setImpfdatum(t.getNewValue()));
+        c16.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setErstimpfungJuJ(t.getNewValue()));
+        c17.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setGenesenen_Bescheinigung(t.getNewValue()));
+
         tvCurrent.setItems(personTableData);
 
         readCSV();
@@ -263,7 +332,7 @@ public class HelloController {
 
     private void readCSV() {
         List<String[]> lines = in.readData(file);
-        lines.forEach(line -> personTableData.add(new PersonTableData(line)));
+        lines.stream().filter(line -> line.length==17).forEach(line -> personTableData.add(new PersonTableData(line)));
     }
 
 
@@ -280,29 +349,32 @@ public class HelloController {
     @FXML
     public void writePerson() throws IOException {
         write();
+        clear();
     }
 
     private void write() throws IOException {
-        String newLine = cbGeschlecht.getValue() + SEPPERATOR
-                + tfVorname.getText() + SEPPERATOR
-                + tfName.getText() + SEPPERATOR
-                + tfGeburtsdatum.getText() + SEPPERATOR
-                + tfPlz.getText() + SEPPERATOR
-                + tfOrt.getText() + SEPPERATOR
-                + tfStrasse.getText() + SEPPERATOR
-                + tfHausnummer.getText() + SEPPERATOR
-                + tfAdresszusatz.getText() + SEPPERATOR
-                + tfTelefon.getText() + SEPPERATOR
-                + tfEmail.getText() + SEPPERATOR
-                + cbBriefkontakt.getValue() + SEPPERATOR
-                + cbImpfserie.getValue() + SEPPERATOR
-                + tfCharge.getText() + SEPPERATOR
-                + dpImpfdatum.getValue() + SEPPERATOR
-                + cbJUJ.getValue() + SEPPERATOR
-                + cbGenesen.getValue() + "\n";
+        String newLine = String.format("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s %s;%s;%s\n",
+                cbGeschlecht.getValue(),
+                tfVorname.getText(),
+                tfName.getText(),
+                tfGeburtsdatum.getText(),
+                tfPlz.getText(),
+                tfOrt.getText(),
+                tfStrasse.getText(),
+                tfHausnummer.getText(),
+                tfAdresszusatz.getText(),
+                tfTelefon.getText(),
+                tfEmail.getText(),
+                cbBriefkontakt.getValue(),
+                cbImpfserie.getValue(),
+                tfCharge.getText(),
+                dpImpfdatum.getValue(),
+                tfTime.getText(),
+                cbJUJ.getValue(),
+                cbGenesen.getValue());
 
         newLine = newLine.replaceAll("null", "");
-        out.write(file, newLine);
+//        out.write(file, newLine);
         personTableData.add(new PersonTableData(newLine.split(";", -1)));
     }
 
@@ -317,12 +389,43 @@ public class HelloController {
     }
 
     @FXML
-    public void close() {
-        Platform.exit();
-    }
-
-    @FXML
     public void openSettings() {
 
+    }
+
+    public void shutdown() {
+        saveData();
+    }
+
+    private void saveData() {
+        ArrayList<String> list = new ArrayList<>();
+        personTableData.forEach(entity -> list.add(String.format("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s\n",
+                entity.getAnrede(),
+                entity.getVorname(),
+                entity.getNachname(),
+                entity.getGeburtsdatum(),
+                entity.getPlz(),
+                entity.getOrt(),
+                entity.getStrasse(),
+                entity.getStrasseNr(),
+                entity.getAdresszusatz(),
+                entity.getTelefon(),
+                entity.getEmail(),
+                entity.getBriefkontakt(),
+                entity.getImpfserie(),
+                entity.getCharge(),
+                entity.getImpfdatum(),
+                entity.getErstimpfungJuJ(),
+                entity.getGenesenen_Bescheinigung())));
+
+        file.delete();
+
+        list.forEach(line -> {
+            try {
+                out.write(file, line);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

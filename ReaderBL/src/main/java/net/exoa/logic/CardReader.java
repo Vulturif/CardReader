@@ -10,6 +10,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
@@ -26,11 +27,18 @@ public class CardReader {
         factory = TerminalFactory.getDefault();
     }
 
-    public List<CardTerminal> listTerminals() throws CardException {
-        return factory.terminals().list();
+    public List<CardTerminal> listTerminals() {
+        try {
+            return factory.terminals().list();
+        } catch (CardException e) {
+            return  new ArrayList<>();
+        }
     }
 
     public Person readCardInTerminal(CardTerminal terminal) {
+        if(terminal == null) {
+            return null;
+        }
         try {
             Card card = terminal.connect("T=1");
             CardChannel channel = card.getBasicChannel();
@@ -98,37 +106,22 @@ public class CardReader {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Element element = (Element) childNodes.item(i);
             switch (element.getTagName()) {
-                case "Geburtsdatum":
-                    person.setGeburtsdatum(getCharacterDataFromElement(element));
-                    break;
-                case "Vorname":
-                    person.setVorname(getCharacterDataFromElement(element));
-                    break;
-                case "Nachname":
-                    person.setName(getCharacterDataFromElement(element));
-                    break;
-                case "Geschlecht":
-                    person.setGeschlecht(getCharacterDataFromElement(element));
-                    break;
-                case "StrassenAdresse":
+                case "Geburtsdatum" -> person.setGeburtsdatum(getCharacterDataFromElement(element));
+                case "Vorname" -> person.setVorname(getCharacterDataFromElement(element));
+                case "Nachname" -> person.setName(getCharacterDataFromElement(element));
+                case "Geschlecht" -> person.setGeschlecht(getCharacterDataFromElement(element));
+                case "StrassenAdresse" -> {
                     NodeList address_nodes = element.getChildNodes();
                     for (int j = 0; j < address_nodes.getLength(); j++) {
                         Element addresselement = (Element) address_nodes.item(j);
                         switch (addresselement.getTagName()) {
-                            case "Postleitzahl":
-                                person.setPlz(getCharacterDataFromElement(addresselement));
-                                break;
-                            case "Ort":
-                                person.setOrt(getCharacterDataFromElement(addresselement));
-                                break;
-                            case "Strasse":
-                                person.setStrasse(getCharacterDataFromElement(addresselement));
-                                break;
-                            case "Hausnummer":
-                                person.setHausnummer(getCharacterDataFromElement(addresselement));
+                            case "Postleitzahl" -> person.setPlz(getCharacterDataFromElement(addresselement));
+                            case "Ort" -> person.setOrt(getCharacterDataFromElement(addresselement));
+                            case "Strasse" -> person.setStrasse(getCharacterDataFromElement(addresselement));
+                            case "Hausnummer" -> person.setHausnummer(getCharacterDataFromElement(addresselement));
                         }
                     }
-                    break;
+                }
             }
         }
 
@@ -139,8 +132,7 @@ public class CardReader {
 
     public static String getCharacterDataFromElement(Element e) {
         Node child = e.getFirstChild();
-        if (child instanceof CharacterData) {
-            CharacterData cd = (CharacterData) child;
+        if (child instanceof CharacterData cd) {
             return cd.getData();
         }
         return "?";
@@ -148,38 +140,17 @@ public class CardReader {
 
     private static void checkResponseCode(String sw) {
         switch (sw) {
-            case "9000":
-                System.out.println("Command successful -Datei gelesen ");
-                break;
-            case "6282":
-                System.out.println("Warning: EndOfFileWarning - weniger Daten vorhanden, als mittels Ne angefordert ");
-                break;
-            case "6281":
-                System.out.println("Warning: CorruptDataWarning - möglicherweise sind die Antwortdaten korrupt ");
-                break;
-            case "6700":
-                System.out.println("Error: WrongLength - Die Anzahl der angeforderten Daten übersteigt die maximale Puffergröße.");
-                break;
-            case "6a82":
-                System.out.println("Error: FileNotFound - per shortFileIdentifier adressiertes EF nicht gefunden ");
-                break;
-            case "6986":
-                System.out.println("Error: NoCurrentEF - es ist kein EF ausgewählt ");
-                break;
-            case "6982":
-                System.out.println("Error: SecurityStatusNotSatisfied - Zugriffsregel nicht erfüllt ");
-                break;
-            case "6981":
-                System.out.println("Error: WrongFileType - ausgewähltes EF ist nicht transparent ");
-                break;
-            case "6b00":
-                System.out.println("Error: OffsetTooBig - Parameter offset in Kommando APDU ist zu groß ");
-                break;
-            case "6900":
-                System.out.println("Error: Command not allowed - Mobiles Kartenterminal: Autorisierung fehlt ");
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + sw);
+            case "9000" -> System.out.println("Command successful -Datei gelesen ");
+            case "6282" -> System.out.println("Warning: EndOfFileWarning - weniger Daten vorhanden, als mittels Ne angefordert ");
+            case "6281" -> System.out.println("Warning: CorruptDataWarning - möglicherweise sind die Antwortdaten korrupt ");
+            case "6700" -> System.out.println("Error: WrongLength - Die Anzahl der angeforderten Daten übersteigt die maximale Puffergröße.");
+            case "6a82" -> System.out.println("Error: FileNotFound - per shortFileIdentifier adressiertes EF nicht gefunden ");
+            case "6986" -> System.out.println("Error: NoCurrentEF - es ist kein EF ausgewählt ");
+            case "6982" -> System.out.println("Error: SecurityStatusNotSatisfied - Zugriffsregel nicht erfüllt ");
+            case "6981" -> System.out.println("Error: WrongFileType - ausgewähltes EF ist nicht transparent ");
+            case "6b00" -> System.out.println("Error: OffsetTooBig - Parameter offset in Kommando APDU ist zu groß ");
+            case "6900" -> System.out.println("Error: Command not allowed - Mobiles Kartenterminal: Autorisierung fehlt ");
+            default -> throw new IllegalStateException("Unexpected value: " + sw);
         }
     }
 }
