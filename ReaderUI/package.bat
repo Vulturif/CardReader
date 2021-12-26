@@ -9,5 +9,7 @@
 --win-dir-chooser ^
 --win-menu ^
 --win-shortcut ^
---app-version 0.9
+--app-version 1.0 ^
+--icon src/main/resources/malteser.ico
+
 pause
