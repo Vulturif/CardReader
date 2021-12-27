@@ -153,8 +153,6 @@ public class HelloController {
         if (!bla.exists()) {
             bla.mkdir();
         }
-
-//        vaccine.getToggles().stream().map(radiobutton -> (RadioButton) radiobutton).forEach(radio -> files.put(radio.getText(), new ArrayList<>()));
     }
 
     private void buildTask() {
@@ -255,84 +253,11 @@ public class HelloController {
         cbReader.setValue(cardTerminal);
         cardTerminals.forEach(terminal -> cbReader.getItems().add(terminal));
 
-        cbGeschlecht.getItems().add("");
-        cbGeschlecht.getItems().add("M");
-        cbGeschlecht.getItems().add("W");
-        cbGeschlecht.getItems().add("D");
-
-        cbBriefkontakt.getItems().add("");
-        cbBriefkontakt.getItems().add("0");
-        cbBriefkontakt.getItems().add("1");
-
-        cbImpfserie.getItems().add("");
-        cbImpfserie.getItems().add("1");
-        cbImpfserie.getItems().add("2");
-        cbImpfserie.getItems().add("3");
-
-        cbJUJ.getItems().add("");
-        cbJUJ.getItems().add("0");
-        cbJUJ.getItems().add("1");
-
-        cbGenesen.getItems().add("");
-        cbGenesen.getItems().add("0");
-        cbGenesen.getItems().add("1");
-
-        executor.scheduleAtFixedRate(task, 3000, 500, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(task, 2000, 500, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(saveTask, 1, 5, TimeUnit.MINUTES);
 
-        c1.setCellValueFactory(new PropertyValueFactory<>("Anrede"));
-        c2.setCellValueFactory(new PropertyValueFactory<>("Vorname"));
-        c3.setCellValueFactory(new PropertyValueFactory<>("Nachname"));
-        c4.setCellValueFactory(new PropertyValueFactory<>("Geburtsdatum"));
-        c5.setCellValueFactory(new PropertyValueFactory<>("Plz"));
-        c6.setCellValueFactory(new PropertyValueFactory<>("Ort"));
-        c7.setCellValueFactory(new PropertyValueFactory<>("Strasse"));
-        c8.setCellValueFactory(new PropertyValueFactory<>("StrasseNr"));
-        c9.setCellValueFactory(new PropertyValueFactory<>("Adresszusatz"));
-        c10.setCellValueFactory(new PropertyValueFactory<>("Telefon"));
-        c11.setCellValueFactory(new PropertyValueFactory<>("Email"));
-        c12.setCellValueFactory(new PropertyValueFactory<>("Briefkontakt"));
-        c13.setCellValueFactory(new PropertyValueFactory<>("Impfserie"));
-        c14.setCellValueFactory(new PropertyValueFactory<>("Charge"));
-        c15.setCellValueFactory(new PropertyValueFactory<>("Impfdatum"));
-        c16.setCellValueFactory(new PropertyValueFactory<>("ErstimpfungJuJ"));
-        c17.setCellValueFactory(new PropertyValueFactory<>("Genesenen_Bescheinigung"));
-
-        setCellFactory(c1);
-        setCellFactory(c2);
-        setCellFactory(c3);
-        setCellFactory(c4);
-        setCellFactory(c5);
-        setCellFactory(c6);
-        setCellFactory(c7);
-        setCellFactory(c8);
-        setCellFactory(c9);
-        setCellFactory(c10);
-        setCellFactory(c11);
-        setCellFactory(c12);
-        setCellFactory(c13);
-        setCellFactory(c14);
-        setCellFactory(c15);
-        setCellFactory(c16);
-        setCellFactory(c17);
-
-        c1.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setAnrede(t.getNewValue()));
-        c2.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setVorname(t.getNewValue()));
-        c3.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setNachname(t.getNewValue()));
-        c4.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setGeburtsdatum(t.getNewValue()));
-        c5.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setPlz(t.getNewValue()));
-        c6.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setOrt(t.getNewValue()));
-        c7.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setStrasse(t.getNewValue()));
-        c8.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setStrasseNr(t.getNewValue()));
-        c9.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setAdresszusatz(t.getNewValue()));
-        c10.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setTelefon(t.getNewValue()));
-        c11.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setEmail(t.getNewValue()));
-        c12.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setBriefkontakt(t.getNewValue()));
-        c13.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setImpfserie(t.getNewValue()));
-        c14.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setCharge(t.getNewValue()));
-        c15.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setImpfdatum(t.getNewValue()));
-        c16.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setErstimpfungJuJ(t.getNewValue()));
-        c17.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setGenesenen_Bescheinigung(t.getNewValue()));
+        setChoiceBoxValues();
+        initTableColumns();
 
         tvCurrent.setItems(personTableData);
 
@@ -342,10 +267,6 @@ public class HelloController {
         vaccine.getToggles().stream().map(toggle -> ((RadioButton) toggle)).forEach(radioButton -> files.put(radioButton.getText(), new File(filePath + String.format("\\Impfung_%d%02d%02d_HHMM_%s.csv", current_date.getYear()-2000, current_date.getMonthValue(), current_date.getDayOfMonth(), radioButton.getText()))));
 
         readCSV();
-    }
-
-    private void setCellFactory(TableColumn<PersonTableData, String> c) {
-        c.setCellFactory(TextFieldTableCell.forTableColumn());
     }
 
     private void readCSV() {
@@ -536,5 +457,89 @@ public class HelloController {
             }
         }));
 
+    }
+
+    private void initTableColumns() {
+        c1.setCellValueFactory(new PropertyValueFactory<>("Anrede"));
+        c2.setCellValueFactory(new PropertyValueFactory<>("Vorname"));
+        c3.setCellValueFactory(new PropertyValueFactory<>("Nachname"));
+        c4.setCellValueFactory(new PropertyValueFactory<>("Geburtsdatum"));
+        c5.setCellValueFactory(new PropertyValueFactory<>("Plz"));
+        c6.setCellValueFactory(new PropertyValueFactory<>("Ort"));
+        c7.setCellValueFactory(new PropertyValueFactory<>("Strasse"));
+        c8.setCellValueFactory(new PropertyValueFactory<>("StrasseNr"));
+        c9.setCellValueFactory(new PropertyValueFactory<>("Adresszusatz"));
+        c10.setCellValueFactory(new PropertyValueFactory<>("Telefon"));
+        c11.setCellValueFactory(new PropertyValueFactory<>("Email"));
+        c12.setCellValueFactory(new PropertyValueFactory<>("Briefkontakt"));
+        c13.setCellValueFactory(new PropertyValueFactory<>("Impfserie"));
+        c14.setCellValueFactory(new PropertyValueFactory<>("Charge"));
+        c15.setCellValueFactory(new PropertyValueFactory<>("Impfdatum"));
+        c16.setCellValueFactory(new PropertyValueFactory<>("ErstimpfungJuJ"));
+        c17.setCellValueFactory(new PropertyValueFactory<>("Genesenen_Bescheinigung"));
+
+        setCellFactory(c1);
+        setCellFactory(c2);
+        setCellFactory(c3);
+        setCellFactory(c4);
+        setCellFactory(c5);
+        setCellFactory(c6);
+        setCellFactory(c7);
+        setCellFactory(c8);
+        setCellFactory(c9);
+        setCellFactory(c10);
+        setCellFactory(c11);
+        setCellFactory(c12);
+        setCellFactory(c13);
+        setCellFactory(c14);
+        setCellFactory(c15);
+        setCellFactory(c16);
+        setCellFactory(c17);
+
+        c1.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setAnrede(t.getNewValue()));
+        c2.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setVorname(t.getNewValue()));
+        c3.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setNachname(t.getNewValue()));
+        c4.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setGeburtsdatum(t.getNewValue()));
+        c5.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setPlz(t.getNewValue()));
+        c6.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setOrt(t.getNewValue()));
+        c7.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setStrasse(t.getNewValue()));
+        c8.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setStrasseNr(t.getNewValue()));
+        c9.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setAdresszusatz(t.getNewValue()));
+        c10.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setTelefon(t.getNewValue()));
+        c11.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setEmail(t.getNewValue()));
+        c12.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setBriefkontakt(t.getNewValue()));
+        c13.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setImpfserie(t.getNewValue()));
+        c14.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setCharge(t.getNewValue()));
+        c15.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setImpfdatum(t.getNewValue()));
+        c16.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setErstimpfungJuJ(t.getNewValue()));
+        c17.setOnEditCommit((TableColumn.CellEditEvent<PersonTableData, String> t) -> t.getTableView().getItems().get(t.getTablePosition().getRow()).setGenesenen_Bescheinigung(t.getNewValue()));
+    }
+
+    private void setChoiceBoxValues() {
+        cbGeschlecht.getItems().add("");
+        cbGeschlecht.getItems().add("M");
+        cbGeschlecht.getItems().add("W");
+        cbGeschlecht.getItems().add("D");
+
+        cbBriefkontakt.getItems().add("");
+        cbBriefkontakt.getItems().add("0");
+        cbBriefkontakt.getItems().add("1");
+
+        cbImpfserie.getItems().add("");
+        cbImpfserie.getItems().add("1");
+        cbImpfserie.getItems().add("2");
+        cbImpfserie.getItems().add("3");
+
+        cbJUJ.getItems().add("");
+        cbJUJ.getItems().add("0");
+        cbJUJ.getItems().add("1");
+
+        cbGenesen.getItems().add("");
+        cbGenesen.getItems().add("0");
+        cbGenesen.getItems().add("1");
+    }
+
+    private void setCellFactory(TableColumn<PersonTableData, String> c) {
+        c.setCellFactory(TextFieldTableCell.forTableColumn());
     }
 }

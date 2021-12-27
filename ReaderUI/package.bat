@@ -9,7 +9,7 @@
 --win-dir-chooser ^
 --win-menu ^
 --win-shortcut ^
---app-version 1.0 ^
+--app-version 1.1 ^
 --vendor "Hendrik Jongebloed" ^
 --icon D:\Development\Workspace\CardReader\ReaderUI\src/main/resources/CardReader.ico
 
