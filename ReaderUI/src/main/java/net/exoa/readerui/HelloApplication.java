@@ -15,8 +15,8 @@ public class HelloApplication extends Application {
         try {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 800, 600);
-        stage.setMinHeight(650);
-        stage.setMinWidth(850);
+        stage.setMinHeight(700);
+        stage.setMinWidth(900);
         stage.setTitle("CardReader");
         stage.getIcons().add(new Image(Objects.requireNonNull(HelloApplication.class.getClassLoader().getResourceAsStream("malteser.png"))));
         stage.setScene(scene);

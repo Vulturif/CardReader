@@ -31,7 +31,12 @@ public class Person {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name.replaceAll("ö", "oe")
+                .replaceAll("ä", "ae")
+                .replaceAll("ü", "ue")
+                .replaceAll("Ö", "Oe")
+                .replaceAll("Ä", "Ae")
+                .replaceAll("Ü", "Ue");
     }
 
     public String getVorname() {
@@ -39,7 +44,12 @@ public class Person {
     }
 
     public void setVorname(String vorname) {
-        this.vorname = vorname;
+        this.vorname = vorname.replaceAll("ö", "oe")
+                .replaceAll("ä", "ae")
+                .replaceAll("ü", "ue")
+                .replaceAll("Ö", "Oe")
+                .replaceAll("Ä", "Ae")
+                .replaceAll("Ü", "Ue");
     }
 
     public String getGeschlecht() {

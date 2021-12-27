@@ -2,6 +2,8 @@ package net.exoa.readerui;
 
 import javafx.beans.property.SimpleStringProperty;
 
+import java.io.File;
+
 public class PersonTableData {
 
     String Anrede;
@@ -21,11 +23,34 @@ public class PersonTableData {
     String Impfdatum;
     String ErstimpfungJuJ;
     String Genesenen_Bescheinigung;
+    File vaccine;
 
-    public PersonTableData(String... data) {
+    public File getVaccine() {
+        return vaccine;
+    }
+
+    public void setVaccine(File vaccine) {
+        this.vaccine = vaccine;
+    }
+
+
+
+    public PersonTableData(File vaccine, String... data) {
+        this.vaccine = vaccine;
+
         Anrede = data[0];
-        Vorname = data[1];
-        Nachname = data[2];
+        Vorname = data[1].replaceAll("ö", "oe")
+                .replaceAll("ä", "ae")
+                .replaceAll("ü", "ue")
+                .replaceAll("Ö", "Oe")
+                .replaceAll("Ä", "Ae")
+                .replaceAll("Ü", "Ue");
+        Nachname = data[2].replaceAll("ö", "oe")
+                .replaceAll("ä", "ae")
+                .replaceAll("ü", "ue")
+                .replaceAll("Ö", "Oe")
+                .replaceAll("Ä", "Ae")
+                .replaceAll("Ü", "Ue");
         Geburtsdatum = data[3];
         Plz = data[4];
         Ort = data[5];

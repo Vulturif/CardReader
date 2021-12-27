@@ -8,9 +8,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import net.exoa.logic.Input;
 import net.exoa.logic.CardReader;
@@ -21,10 +19,10 @@ import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -81,6 +79,10 @@ public class HelloController {
     @FXML
     private TextField tfTime;
     @FXML
+    private ToggleGroup vaccine;
+    @FXML
+    private TitledPane vacBox;
+    @FXML
     private TableColumn<PersonTableData, String> c1;
     @FXML
     private TableColumn<PersonTableData, String> c2;
@@ -115,20 +117,24 @@ public class HelloController {
     @FXML
     private TableColumn<PersonTableData, String> c17;
 
-    ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
+    private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
 
-    CardReader reader = new CardReader();
-    Output out = new Output();
-    Input in = new Input();
+    private final CardReader reader = new CardReader();
+    private final Output out = new Output();
+    private final Input in = new Input();
 
-    File file;
+    private final HashMap<String, File> files = new HashMap<>();
+    private final String filePath;
 
-    List<CardTerminal> cardTerminals;
+    private List<CardTerminal> cardTerminals;
     CardTerminal cardTerminal;
     TimerTask task;
     TimerTask saveTask;
 
+
     Preferences prefs = Preferences.userNodeForPackage(net.exoa.readerui.HelloController.class);
+
+    Border baseBorder;
 
     private final ObservableList<PersonTableData> personTableData = FXCollections.observableArrayList();
 
@@ -142,14 +148,13 @@ public class HelloController {
         }
 
         String PREF_NAME = "path_to_csv";
-        String filePath = prefs.get(PREF_NAME, "C:\\tmp");
+        filePath = prefs.get(PREF_NAME, "C:\\tmp");
         File bla = new File(filePath);
         if (!bla.exists()) {
             bla.mkdir();
         }
 
-        LocalDate current_date = LocalDate.now();
-        file = new File(filePath + String.format("\\Impfung_%d%02d%02d_HHMM.csv", current_date.getYear()-2000, current_date.getMonthValue(), current_date.getDayOfMonth()));
+//        vaccine.getToggles().stream().map(radiobutton -> (RadioButton) radiobutton).forEach(radio -> files.put(radio.getText(), new ArrayList<>()));
     }
 
     private void buildTask() {
@@ -226,6 +231,7 @@ public class HelloController {
         tfTime.setText(null);
         cbJUJ.setValue(null);
         cbGenesen.setValue(null);
+        vaccine.selectToggle(null);
     }
 
     private void readCard() {
@@ -330,6 +336,11 @@ public class HelloController {
 
         tvCurrent.setItems(personTableData);
 
+        baseBorder = tfName.getBorder();
+
+        LocalDate current_date = LocalDate.now();
+        vaccine.getToggles().stream().map(toggle -> ((RadioButton) toggle)).forEach(radioButton -> files.put(radioButton.getText(), new File(filePath + String.format("\\Impfung_%d%02d%02d_HHMM_%s.csv", current_date.getYear()-2000, current_date.getMonthValue(), current_date.getDayOfMonth(), radioButton.getText()))));
+
         readCSV();
     }
 
@@ -338,8 +349,7 @@ public class HelloController {
     }
 
     private void readCSV() {
-        List<String[]> lines = in.readData(file);
-        lines.stream().filter(line -> line.length==17).forEach(line -> personTableData.add(new PersonTableData(line)));
+        files.forEach((key, value) -> in.readData(value).stream().filter(line -> line.length == 17).forEach(line -> personTableData.add(new PersonTableData(value, line))));
     }
 
 
@@ -355,15 +365,100 @@ public class HelloController {
 
     @FXML
     public void writePerson() throws IOException {
-        write();
-        cleanUp();
+        if (!validate()) {
+            write();
+            cleanUp();
+        }
+    }
+
+    @SuppressWarnings("DuplicatedCode")
+    private boolean validate() {
+        ArrayList<Boolean> results = new ArrayList<>();
+        results.add(validate(cbGeschlecht));
+        results.add(validate(tfVorname));
+        results.add(validate(tfName));
+        results.add(validate(tfGeburtsdatum));
+        results.add(validate(tfPlz));
+        results.add(validate(tfOrt));
+        results.add(validate(tfStrasse));
+        results.add(validate(tfHausnummer));
+        results.add(validate(tfAdresszusatz));
+        results.add(validate(tfTelefon));
+        results.add(validate(tfEmail));
+        results.add(validate(cbBriefkontakt));
+        results.add(validate(cbImpfserie));
+        results.add(validate(tfCharge));
+        results.add(validate(dpImpfdatum));
+        results.add(validate(tfTime));
+        results.add(validate(cbJUJ));
+        results.add(validate(cbGenesen));
+
+        if (tfTime.getText() != null) {
+            final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+            try {
+                Date format = dateFormat.parse(tfTime.getText());
+                final Calendar calendar = Calendar.getInstance();
+                calendar.setTime(format);
+                tfTime.setText(String.format("%02d:%02d", calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE)));
+                tfTime.setBorder(baseBorder);
+                results.add(false);
+            } catch (ParseException e) {
+                tfTime.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+                results.add(true);
+            }
+        }
+
+        if (vaccine.getSelectedToggle() == null) {
+            vacBox.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        } else {
+            vacBox.setBorder(baseBorder);
+        }
+
+        return results.contains(true);
+    }
+
+    private boolean validate(Control field) {
+
+        boolean error;
+        String value = "";
+        if (field instanceof TextField) {
+            value = ((TextField) field).getText();
+        } else if (field instanceof ChoiceBox<?>) {
+            //noinspection unchecked
+            value = ((ChoiceBox<String>) field).getValue();
+        }
+
+        if (field instanceof DatePicker) {
+            LocalDate date = ((DatePicker) field).getValue();
+            error = date == null;
+        } else {
+            error = value == null || value.trim().isEmpty();
+        }
+
+        if (error) {
+            field.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        } else {
+            field.setBorder(baseBorder);
+        }
+
+        return error;
     }
 
     private void write() throws IOException {
         String newLine = String.format("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s %s;%s;%s\n",
                 cbGeschlecht.getValue(),
-                tfVorname.getText(),
-                tfName.getText(),
+                tfVorname.getText().replaceAll("ö", "oe")
+                        .replaceAll("ä", "ae")
+                        .replaceAll("ü", "ue")
+                        .replaceAll("Ö", "Oe")
+                        .replaceAll("Ä", "Ae")
+                        .replaceAll("Ü", "Ue"),
+                tfName.getText().replaceAll("ö", "oe")
+                        .replaceAll("ä", "ae")
+                        .replaceAll("ü", "ue")
+                        .replaceAll("Ö", "Oe")
+                        .replaceAll("Ä", "Ae")
+                        .replaceAll("Ü", "Ue"),
                 tfGeburtsdatum.getText(),
                 tfPlz.getText(),
                 tfOrt.getText(),
@@ -381,8 +476,8 @@ public class HelloController {
                 cbGenesen.getValue());
 
         newLine = newLine.replaceAll("null", "");
-//        out.write(file, newLine);
-        personTableData.add(new PersonTableData(newLine.split(";", -1)));
+
+        personTableData.add(new PersonTableData(files.get(((RadioButton) vaccine.getSelectedToggle()).getText()), newLine.split(";", -1)));
     }
 
     private String reanrangeDate(String date) {
@@ -405,34 +500,41 @@ public class HelloController {
     }
 
     private void saveData() {
-        ArrayList<String> list = new ArrayList<>();
-        personTableData.forEach(entity -> list.add(String.format("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s\n",
-                entity.getAnrede(),
-                entity.getVorname(),
-                entity.getNachname(),
-                entity.getGeburtsdatum(),
-                entity.getPlz(),
-                entity.getOrt(),
-                entity.getStrasse(),
-                entity.getStrasseNr(),
-                entity.getAdresszusatz(),
-                entity.getTelefon(),
-                entity.getEmail(),
-                entity.getBriefkontakt(),
-                entity.getImpfserie(),
-                entity.getCharge(),
-                entity.getImpfdatum(),
-                entity.getErstimpfungJuJ(),
-                entity.getGenesenen_Bescheinigung())));
+        HashMap<File, List<String>> blub = new HashMap<>();
+        files.forEach((key, value) -> blub.put(value, new ArrayList<>()));
 
-        file.delete();
+        personTableData.forEach(entity -> {
+            String newLine = String.format("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s\n",
+                    entity.getAnrede(),
+                    entity.getVorname(),
+                    entity.getNachname(),
+                    entity.getGeburtsdatum(),
+                    entity.getPlz(),
+                    entity.getOrt(),
+                    entity.getStrasse(),
+                    entity.getStrasseNr(),
+                    entity.getAdresszusatz(),
+                    entity.getTelefon(),
+                    entity.getEmail(),
+                    entity.getBriefkontakt(),
+                    entity.getImpfserie(),
+                    entity.getCharge(),
+                    entity.getImpfdatum(),
+                    entity.getErstimpfungJuJ(),
+                    entity.getGenesenen_Bescheinigung());
 
-        list.forEach(line -> {
+            blub.get(entity.getVaccine()).add(newLine);
+        });
+
+        files.forEach((key, value) -> value.delete());
+
+        blub.forEach((key, value) -> value.forEach(line -> {
             try {
-                out.write(file, line);
+                out.write(key, line);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        });
+        }));
+
     }
 }
