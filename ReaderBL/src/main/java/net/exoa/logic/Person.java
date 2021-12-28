@@ -10,7 +10,7 @@ public class Person {
     private String plz;
     private String ort;
 
-    private final static String SEPERATOR =";";
+    private final static String SEPERATOR = ";";
 
     @Override
     public String toString() {

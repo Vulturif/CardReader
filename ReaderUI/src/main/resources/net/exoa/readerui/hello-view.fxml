@@ -65,7 +65,7 @@
                                 </GridPane>
                             </AnchorPane>
                         </TitledPane>
-                        <TitledPane maxWidth="800.0" text="Zusätzsiche Daten:">
+                        <TitledPane maxWidth="800.0" text="Zusätzliche Daten:">
                             <padding>
                                 <Insets top="10.0" />
                             </padding>
@@ -114,33 +114,30 @@
                         </TitledPane>
                         <TitledPane fx:id="vacBox" maxWidth="800.0" text="Vaccine">
                             <padding>
-                                <Insets top="10.0"/>
+                                <Insets top="10.0" />
                             </padding>
                             <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" prefWidth="766.0">
                                 <RadioButton mnemonicParsing="false" text="Johnsen und Johnsen">
                                     <padding>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                     </padding>
                                     <toggleGroup>
-                                        <ToggleGroup fx:id="vaccine"/>
+                                        <ToggleGroup fx:id="vaccine" />
                                     </toggleGroup>
                                 </RadioButton>
-                                <RadioButton mnemonicParsing="false" text="Astra Zeneca"
-                                             toggleGroup="$vaccine">
+                                <RadioButton mnemonicParsing="false" text="Astra Zeneca" toggleGroup="$vaccine">
                                     <padding>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                     </padding>
                                 </RadioButton>
-                                <RadioButton mnemonicParsing="false" text="Biontech"
-                                             toggleGroup="$vaccine">
+                                <RadioButton mnemonicParsing="false" text="Biontech" toggleGroup="$vaccine">
                                     <padding>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                     </padding>
                                 </RadioButton>
-                                <RadioButton mnemonicParsing="false" text="Moderna"
-                                             toggleGroup="$vaccine">
+                                <RadioButton mnemonicParsing="false" text="Moderna" toggleGroup="$vaccine">
                                     <padding>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                     </padding>
                                 </RadioButton>
                             </HBox>
@@ -148,34 +145,31 @@
                         <VBox>
                             <HBox nodeOrientation="RIGHT_TO_LEFT">
                                 <VBox.margin>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                 </VBox.margin>
                                 <padding>
-                                    <Insets left="20.0" right="20.0" top="20.0"/>
+                                    <Insets left="20.0" right="20.0" top="20.0" />
                                 </padding>
-                                <Button fx:id="btnSave" mnemonicParsing="false" onAction="#writePerson"
-                                        prefHeight="25.0" prefWidth="114.0" text="Speichern">
+                                <Button fx:id="btnSave" mnemonicParsing="false" onAction="#writePerson" prefHeight="25.0" prefWidth="114.0" text="Speichern">
                                     <HBox.margin>
-                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                     </HBox.margin>
                                 </Button>
-                                <Button alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#cleanUp"
-                                        text="Felder leeren">
+                                <Button alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#cleanUp" text="Felder leeren">
                                     <HBox.margin>
-                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                     </HBox.margin>
                                 </Button>
-                                <CheckBox fx:id="cbAutoSave" mnemonicParsing="false" onAction="#checkAutoSave"
-                                          text="Automatisch beim Entfernen der Karte Speichern">
+                                <CheckBox fx:id="cbAutoSave" mnemonicParsing="false" onAction="#checkAutoSave" text="Automatisch beim Entfernen der Karte Speichern">
                                     <HBox.margin>
-                                        <Insets bottom="10.0" left="10.0" right="10.0" top="15.0"/>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="15.0" />
                                     </HBox.margin>
                                 </CheckBox>
                             </HBox>
                             <Group>
-                                <Label layoutY="4.0" text="Staus:"/>
-                                <Label fx:id="lblStatus" layoutX="42.0" layoutY="4.0"/>
-                                <ChoiceBox fx:id="cbReader" layoutX="279.0" prefHeight="25.0" prefWidth="492.0"/>
+                                <Label layoutY="4.0" text="Staus:" />
+                                <Label fx:id="lblStatus" layoutX="42.0" layoutY="4.0" />
+                                <ChoiceBox fx:id="cbReader" layoutX="279.0" prefHeight="25.0" prefWidth="492.0" />
                             </Group>
                         </VBox>
                     </VBox>

@@ -22,12 +22,13 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import  java.util.prefs.*;
+import java.util.prefs.*;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class HelloController {
@@ -143,7 +144,7 @@ public class HelloController {
     public HelloController() {
         buildTask();
         cardTerminals = reader.listTerminals();
-        if(!cardTerminals.isEmpty()) {
+        if (!cardTerminals.isEmpty()) {
             cardTerminal = cardTerminals.get(0);
         }
 
@@ -163,7 +164,7 @@ public class HelloController {
                     try {
                         if (cbReader.getValue() == null) {
                             cardTerminals = reader.listTerminals();
-                            if(!cardTerminals.isEmpty()) {
+                            if (!cardTerminals.isEmpty()) {
                                 cbReader.setValue(cardTerminals.get(0));
                             } else {
                                 lblStatus.setText("Kein Kartenleser vorhanden!");
@@ -222,20 +223,20 @@ public class HelloController {
         tfAdresszusatz.setText(null);
         tfTelefon.setText(null);
         tfEmail.setText(null);
-        cbBriefkontakt.setValue("");
+        cbBriefkontakt.setValue("1");
         cbImpfserie.setValue("");
         tfCharge.setText(null);
         dpImpfdatum.setValue(null);
         tfTime.setText(null);
-        cbJUJ.setValue(null);
-        cbGenesen.setValue(null);
+        cbJUJ.setValue("0");
+        cbGenesen.setValue("0");
         vaccine.selectToggle(null);
     }
 
     private void readCard() {
         Person currentPerson = reader.readCardInTerminal(cbReader.getValue());
 
-        if(currentPerson == null) {
+        if (currentPerson == null) {
             return;
         }
         cbGeschlecht.setValue(currentPerson.getGeschlecht());
@@ -264,7 +265,7 @@ public class HelloController {
         baseBorder = tfName.getBorder();
 
         LocalDate current_date = LocalDate.now();
-        vaccine.getToggles().stream().map(toggle -> ((RadioButton) toggle)).forEach(radioButton -> files.put(radioButton.getText(), new File(filePath + String.format("\\Impfung_%d%02d%02d_HHMM_%s.csv", current_date.getYear()-2000, current_date.getMonthValue(), current_date.getDayOfMonth(), radioButton.getText()))));
+        vaccine.getToggles().stream().map(toggle -> ((RadioButton) toggle)).forEach(radioButton -> files.put(radioButton.getText(), new File(filePath + String.format("\\Impfung_%d%02d%02d_HHMM_%s.csv", current_date.getYear() - 2000, current_date.getMonthValue(), current_date.getDayOfMonth(), radioButton.getText()))));
 
         readCSV();
     }
@@ -303,18 +304,15 @@ public class HelloController {
         results.add(validate(tfOrt));
         results.add(validate(tfStrasse));
         results.add(validate(tfHausnummer));
-        results.add(validate(tfAdresszusatz));
         results.add(validate(tfTelefon));
-        results.add(validate(tfEmail));
         results.add(validate(cbBriefkontakt));
         results.add(validate(cbImpfserie));
         results.add(validate(tfCharge));
         results.add(validate(dpImpfdatum));
-        results.add(validate(tfTime));
         results.add(validate(cbJUJ));
         results.add(validate(cbGenesen));
 
-        if (tfTime.getText() != null) {
+        if (tfTime.getText() != null && !tfTime.getText().isEmpty()) {
             final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
             try {
                 Date format = dateFormat.parse(tfTime.getText());
@@ -327,10 +325,21 @@ public class HelloController {
                 tfTime.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
                 results.add(true);
             }
+        } else {
+            tfTime.setBorder(baseBorder);
+        }
+
+        try {
+            Integer.parseInt(tfTelefon.getText());
+            tfTelefon.setBorder(baseBorder);
+        } catch (NumberFormatException e) {
+            tfTelefon.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+            results.add(true);
         }
 
         if (vaccine.getSelectedToggle() == null) {
             vacBox.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+            results.add(true);
         } else {
             vacBox.setBorder(baseBorder);
         }
@@ -340,7 +349,7 @@ public class HelloController {
 
     private boolean validate(Control field) {
 
-        boolean error;
+        boolean error = false;
         String value = "";
         if (field instanceof TextField) {
             value = ((TextField) field).getText();
@@ -351,7 +360,25 @@ public class HelloController {
 
         if (field instanceof DatePicker) {
             LocalDate date = ((DatePicker) field).getValue();
-            error = date == null;
+//            if (date == null) {
+            String text = ((DatePicker) field).getEditor().getText();
+            if (text != null && !text.trim().isEmpty()) {
+                if (text.matches("^(?:31([/\\-.])(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))\\1|(?:29|30)([/\\-.])(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))\\2)(?:1[6-9]|[2-9]\\d)?\\d{2}$|^29([/\\-.])(?:0?2|Feb)\\3(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:16|[2468][048]|[3579][26])00)$|^(?:0?[1-9]|1\\d|2[0-8])([/\\-.])(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\\4(?:1[6-9]|[2-9]\\d)?\\d{2}$")) {
+                    final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+                    dateFormat.setLenient(false);
+
+                    try {
+                        Date format = dateFormat.parse(text);
+                        ((DatePicker) field).setValue(convertToLocalDateViaMilisecond(format));
+//                        final Calendar calendar = Calendar.getInstance();
+                    } catch (ParseException e) {
+                        error = true;
+                    }
+                }
+            } else {
+                error = true;
+            }
+//            }
         } else {
             error = value == null || value.trim().isEmpty();
         }
@@ -365,8 +392,14 @@ public class HelloController {
         return error;
     }
 
+    public LocalDate convertToLocalDateViaMilisecond(Date dateToConvert) {
+        return dateToConvert.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+    }
+
     private void write() throws IOException {
-        String newLine = String.format("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s %s;%s;%s\n",
+        String newLine = String.format("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%02d.%02d.%s %s;%s;%s\n",
                 cbGeschlecht.getValue(),
                 tfVorname.getText().replaceAll("ö", "oe")
                         .replaceAll("ä", "ae")
@@ -391,7 +424,7 @@ public class HelloController {
                 cbBriefkontakt.getValue(),
                 cbImpfserie.getValue(),
                 tfCharge.getText(),
-                dpImpfdatum.getValue(),
+                dpImpfdatum.getValue().getDayOfMonth(), dpImpfdatum.getValue().getMonthValue(), dpImpfdatum.getValue().getYear(),
                 tfTime.getText(),
                 cbJUJ.getValue(),
                 cbGenesen.getValue());
@@ -521,22 +554,22 @@ public class HelloController {
         cbGeschlecht.getItems().add("W");
         cbGeschlecht.getItems().add("D");
 
-        cbBriefkontakt.getItems().add("");
         cbBriefkontakt.getItems().add("0");
         cbBriefkontakt.getItems().add("1");
+        cbBriefkontakt.setValue("1");
 
         cbImpfserie.getItems().add("");
         cbImpfserie.getItems().add("1");
         cbImpfserie.getItems().add("2");
         cbImpfserie.getItems().add("3");
 
-        cbJUJ.getItems().add("");
         cbJUJ.getItems().add("0");
         cbJUJ.getItems().add("1");
+        cbJUJ.setValue("0");
 
-        cbGenesen.getItems().add("");
         cbGenesen.getItems().add("0");
         cbGenesen.getItems().add("1");
+        cbGenesen.setValue("0");
     }
 
     private void setCellFactory(TableColumn<PersonTableData, String> c) {

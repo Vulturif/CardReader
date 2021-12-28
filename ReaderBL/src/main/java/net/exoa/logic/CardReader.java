@@ -19,7 +19,7 @@ public class CardReader {
 
     private static final byte[] SELECT_MF = new byte[]{0x00, (byte) 0xA4, 0x04, 0x0C, 0x07, (byte) 0xD2, 0x76, 0x00, 0x01, 0x44, (byte) 0x80, 0x00};
     private static final byte[] SELECT_HCA = new byte[]{0x00, (byte) 0xA4, 0x04, 0x0C, 0x06, (byte) 0xD2, 0x76, 0x00, 0x00, 0x01, 0x02};
-    private static final byte[] SELECT_FILE_PD = new byte[]{(byte) 0x00, (byte) 0xB0, (byte) 0x81,(byte) 0X00,(byte) 0x00, 0x00, 0x00};
+    private static final byte[] SELECT_FILE_PD = new byte[]{(byte) 0x00, (byte) 0xB0, (byte) 0x81, (byte) 0X00, (byte) 0x00, 0x00, 0x00};
 
     private final TerminalFactory factory;
 
@@ -31,19 +31,19 @@ public class CardReader {
         try {
             return factory.terminals().list();
         } catch (CardException e) {
-            return  new ArrayList<>();
+            return new ArrayList<>();
         }
     }
 
     public Person readCardInTerminal(CardTerminal terminal) {
-        if(terminal == null) {
+        if (terminal == null) {
             return null;
         }
         try {
             Card card = terminal.connect("T=1");
             CardChannel channel = card.getBasicChannel();
 
-            System.out.println("Card_Info: "+ card);
+            System.out.println("Card_Info: " + card);
 
             CommandAPDU SELECT_MF_APDU = new CommandAPDU(SELECT_MF);
             CommandAPDU SELECT_HCA_APDU = new CommandAPDU(SELECT_HCA);
@@ -67,7 +67,7 @@ public class CardReader {
     }
 
     private static String DecodeVD(byte[] bytes) throws IOException {
-        int length = (bytes[0]<<8) + bytes[1];
+        int length = (bytes[0] << 8) + bytes[1];
         byte[] bytes1 = Arrays.copyOfRange(bytes, 2, length);
         return decompress(bytes1);
     }
@@ -79,7 +79,7 @@ public class CardReader {
 
         StringBuilder buffer = new StringBuilder();
         int data = bf.read();
-        while(data != -1) {
+        while (data != -1) {
             buffer.append((char) data);
             try {
                 data = bf.read();

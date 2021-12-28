@@ -1,7 +1,5 @@
 package net.exoa.readerui;
 
-import javafx.beans.property.SimpleStringProperty;
-
 import java.io.File;
 
 public class PersonTableData {
@@ -32,7 +30,6 @@ public class PersonTableData {
     public void setVaccine(File vaccine) {
         this.vaccine = vaccine;
     }
-
 
 
     public PersonTableData(File vaccine, String... data) {

@@ -4,9 +4,7 @@ package net.exoa.logic;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.nio.charset.StandardCharsets;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class Output {
@@ -19,7 +17,7 @@ public class Output {
             write(file, HEADER);
         }
 
-        try (FileWriter pw = new FileWriter(file,true)) {
+        try (FileWriter pw = new FileWriter(file, StandardCharsets.UTF_8, true)) {
             pw.append(newLine);
         } catch (IOException e) {
             e.printStackTrace();
