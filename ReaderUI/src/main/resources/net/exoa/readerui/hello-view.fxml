@@ -54,14 +54,14 @@
                                     <Label text="Ort:" GridPane.columnIndex="3" GridPane.rowIndex="2" />
                                     <Label text="Straße:" GridPane.columnIndex="3" GridPane.rowIndex="4" />
                                     <Label text="Nr.:" GridPane.columnIndex="3" GridPane.rowIndex="6" />
-                                    <ChoiceBox fx:id="cbGeschlecht" prefHeight="25.0" prefWidth="95.0" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.vgrow="NEVER" />
-                                    <TextField fx:id="tfVorname" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                    <ChoiceBox fx:id="cbGender" prefHeight="25.0" prefWidth="95.0" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.vgrow="NEVER" />
+                                    <TextField fx:id="tfFirstname" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                     <TextField fx:id="tfName" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                    <TextField fx:id="tfGeburtsdatum" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                                    <TextField fx:id="tfBirthDate" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                                     <TextField fx:id="tfPlz" GridPane.columnIndex="4" />
                                     <TextField fx:id="tfOrt" GridPane.columnIndex="4" GridPane.rowIndex="2" />
-                                    <TextField fx:id="tfStrasse" GridPane.columnIndex="4" GridPane.rowIndex="4" />
-                                    <TextField fx:id="tfHausnummer" GridPane.columnIndex="4" GridPane.rowIndex="6" />
+                                    <TextField fx:id="tfStreet" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+                                    <TextField fx:id="tfHouseNumber" GridPane.columnIndex="4" GridPane.rowIndex="6" />
                                 </GridPane>
                             </AnchorPane>
                         </TitledPane>
@@ -99,16 +99,19 @@
                                     <Label text="Erstimpfung Johnson&amp;Johnson:" GridPane.columnIndex="3" GridPane.rowIndex="3" />
                                     <Label text="Genesenen-Bescheinigung:" GridPane.columnIndex="3" GridPane.rowIndex="4" />
                                     <Label text="Impfuhrzeit:" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                                    <TextField fx:id="tfAdresszusatz" GridPane.columnIndex="1" />
-                                    <TextField fx:id="tfTelefon" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <TextField fx:id="tfStreetAddition" GridPane.columnIndex="1" />
+                                    <TextField fx:id="tfPhoneNumber" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                     <TextField fx:id="tfEmail" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                    <ChoiceBox fx:id="cbBriefkontakt" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                    <ChoiceBox fx:id="cbImpfserie" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                    <ChoiceBox fx:id="cbPostalContact" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                              <effect>
+                                 <Blend />
+                              </effect></ChoiceBox>
+                                    <ChoiceBox fx:id="cbVaccinationNumber" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                                     <TextField fx:id="tfCharge" GridPane.columnIndex="4" />
-                                    <DatePicker fx:id="dpImpfdatum" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                                    <DatePicker fx:id="dpVaccinationDate" GridPane.columnIndex="4" GridPane.rowIndex="1" />
                                     <TextField fx:id="tfTime" GridPane.columnIndex="4" GridPane.rowIndex="2" />
                                     <ChoiceBox fx:id="cbJUJ" prefWidth="150.0" GridPane.columnIndex="4" GridPane.rowIndex="3" />
-                                    <ChoiceBox fx:id="cbGenesen" prefWidth="150.0" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+                                    <ChoiceBox fx:id="cbCured" prefWidth="150.0" GridPane.columnIndex="4" GridPane.rowIndex="4" />
                                    <Button mnemonicParsing="false" onAction="#setDateToday" text="Heute" GridPane.columnIndex="5" GridPane.rowIndex="1">
                                       <GridPane.margin>
                                          <Insets left="5.0" />
@@ -121,10 +124,10 @@
                             <padding>
                                 <Insets top="10.0" />
                             </padding>
-                            <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT" prefWidth="766.0">
+                            <HBox alignment="CENTER" nodeOrientation="RIGHT_TO_LEFT">
                                 <RadioButton mnemonicParsing="false" text="Johnsen und Johnsen">
                                     <padding>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                        <Insets bottom="5.0" left="25.0" right="25.0" top="5.0" />
                                     </padding>
                                     <toggleGroup>
                                         <ToggleGroup fx:id="vaccine" />
@@ -132,18 +135,21 @@
                                 </RadioButton>
                                 <RadioButton mnemonicParsing="false" text="Astra Zeneca" toggleGroup="$vaccine">
                                     <padding>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                        <Insets bottom="5.0" left="25.0" right="25.0" top="5.0" />
                                     </padding>
                                 </RadioButton>
                                 <RadioButton mnemonicParsing="false" text="Biontech" toggleGroup="$vaccine">
                                     <padding>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                        <Insets bottom="5.0" left="25.0" right="25.0" top="5.0" />
                                     </padding>
                                 </RadioButton>
-                                <RadioButton mnemonicParsing="false" text="Moderna" toggleGroup="$vaccine">
+                                <RadioButton contentDisplay="TOP" mnemonicParsing="false" text="Moderna" textAlignment="CENTER" toggleGroup="$vaccine" wrapText="true" HBox.hgrow="ALWAYS">
                                     <padding>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                        <Insets bottom="5.0" left="25.0" right="25.0" top="5.0" />
                                     </padding>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
                                 </RadioButton>
                             </HBox>
                         </TitledPane>

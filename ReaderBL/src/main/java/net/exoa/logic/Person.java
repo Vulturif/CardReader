@@ -1,5 +1,6 @@
 package net.exoa.logic;
 
+@SuppressWarnings("SpellCheckingInspection")
 public class Person {
     private String name;
     private String vorname;
@@ -9,8 +10,6 @@ public class Person {
     private String hausnummer;
     private String plz;
     private String ort;
-
-    private final static String SEPERATOR = ";";
 
     @Override
     public String toString() {
@@ -98,17 +97,5 @@ public class Person {
 
     public void setOrt(String ort) {
         this.ort = ort;
-    }
-
-    public String toCSV() {
-
-        return Geschlecht + SEPERATOR +
-                vorname + SEPERATOR +
-                name + SEPERATOR +
-                geburtsdatum + SEPERATOR +
-                plz + SEPERATOR +
-                ort + SEPERATOR +
-                strasse + SEPERATOR +
-                hausnummer + SEPERATOR;
     }
 }

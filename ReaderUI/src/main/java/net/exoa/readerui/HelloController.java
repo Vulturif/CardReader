@@ -10,10 +10,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import net.exoa.logic.Input;
-import net.exoa.logic.CardReader;
-import net.exoa.logic.Output;
-import net.exoa.logic.Person;
+import net.exoa.logic.*;
 
 import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
@@ -30,45 +27,47 @@ import java.util.concurrent.TimeUnit;
 
 import java.util.prefs.*;
 
+import static net.exoa.logic.Constants.*;
+
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class HelloController {
 
     @FXML
     private Label lblStatus;
     @FXML
-    private TextField tfVorname;
+    private TextField tfFirstname;
     @FXML
     private TextField tfName;
     @FXML
-    private TextField tfGeburtsdatum;
+    private TextField tfBirthDate;
     @FXML
     private TextField tfPlz;
     @FXML
     private TextField tfOrt;
     @FXML
-    private TextField tfStrasse;
+    private TextField tfStreet;
     @FXML
-    private TextField tfHausnummer;
+    private TextField tfHouseNumber;
     @FXML
-    private ChoiceBox<String> cbGeschlecht;
+    private ChoiceBox<String> cbGender;
     @FXML
     private ChoiceBox<CardTerminal> cbReader;
     @FXML
-    private ChoiceBox<String> cbGenesen;
+    private ChoiceBox<String> cbCured;
     @FXML
     private ChoiceBox<String> cbJUJ;
     @FXML
-    private DatePicker dpImpfdatum;
+    private DatePicker dpVaccinationDate;
     @FXML
-    private ChoiceBox<String> cbImpfserie;
+    private ChoiceBox<String> cbVaccinationNumber;
     @FXML
-    private ChoiceBox<String> cbBriefkontakt;
+    private ChoiceBox<String> cbPostalContact;
     @FXML
     private TextField tfEmail;
     @FXML
-    private TextField tfTelefon;
+    private TextField tfPhoneNumber;
     @FXML
-    private TextField tfAdresszusatz;
+    private TextField tfStreetAddition;
     @FXML
     private TextField tfCharge;
     @FXML
@@ -118,28 +117,25 @@ public class HelloController {
     @FXML
     private TableColumn<PersonTableData, String> c17;
 
-    private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
 
+    private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
     private final CardReader reader = new CardReader();
     private final Output out = new Output();
     private final Input in = new Input();
-
     private final HashMap<String, File> files = new HashMap<>();
     private final String filePath;
 
     private List<CardTerminal> cardTerminals;
-    CardTerminal cardTerminal;
-    TimerTask task;
-    TimerTask saveTask;
+    private CardTerminal cardTerminal;
+    private TimerTask task;
+    private TimerTask saveTask;
 
-
-    Preferences prefs = Preferences.userNodeForPackage(net.exoa.readerui.HelloController.class);
+    private final Preferences prefs = Preferences.userNodeForPackage(net.exoa.readerui.HelloController.class);
 
     Border baseBorder;
 
     private final ObservableList<PersonTableData> personTableData = FXCollections.observableArrayList();
-
-    boolean reRead = true;
+    private boolean reRead = true;
 
     public HelloController() {
         buildTask();
@@ -167,7 +163,7 @@ public class HelloController {
                             if (!cardTerminals.isEmpty()) {
                                 cbReader.setValue(cardTerminals.get(0));
                             } else {
-                                lblStatus.setText("Kein Kartenleser vorhanden!");
+                                lblStatus.setText(NO_CARD_READER);
                                 lblStatus.setBackground(new Background(new BackgroundFill(Color.RED, new CornerRadii(10.0), new Insets(-5.0))));
                                 return;
                             }
@@ -183,7 +179,7 @@ public class HelloController {
                                 try {
                                     readCard();
                                 } catch (Exception e) {
-                                    lblStatus.setText("Fehler beim Lesen der Karte!");
+                                    lblStatus.setText(ERROR_READING_CARD);
                                     lblStatus.setBackground(new Background(new BackgroundFill(Color.RED, new CornerRadii(10.0), new Insets(-5.0))));
                                 }
                             }
@@ -212,24 +208,24 @@ public class HelloController {
 
     @FXML
     public void cleanUp() {
-        cbGeschlecht.setValue(null);
-        tfVorname.setText(null);
+        cbGender.setValue(null);
+        tfFirstname.setText(null);
         tfName.setText(null);
-        tfGeburtsdatum.setText(null);
+        tfBirthDate.setText(null);
         tfPlz.setText(null);
         tfOrt.setText(null);
-        tfStrasse.setText(null);
-        tfHausnummer.setText(null);
-        tfAdresszusatz.setText(null);
-        tfTelefon.setText(null);
+        tfStreet.setText(null);
+        tfHouseNumber.setText(null);
+        tfStreetAddition.setText(null);
+        tfPhoneNumber.setText(null);
         tfEmail.setText(null);
-        cbBriefkontakt.setValue("1");
-        cbImpfserie.setValue("");
+        cbPostalContact.setValue("1");
+        cbVaccinationNumber.setValue("");
         tfCharge.setText(null);
-        dpImpfdatum.setValue(null);
+        dpVaccinationDate.setValue(null);
         tfTime.setText(null);
         cbJUJ.setValue("0");
-        cbGenesen.setValue("0");
+        cbCured.setValue("0");
         vaccine.selectToggle(null);
     }
 
@@ -239,14 +235,14 @@ public class HelloController {
         if (currentPerson == null) {
             return;
         }
-        cbGeschlecht.setValue(currentPerson.getGeschlecht());
-        tfVorname.setText(currentPerson.getVorname());
+        cbGender.setValue(currentPerson.getGeschlecht());
+        tfFirstname.setText(currentPerson.getVorname());
         tfName.setText(currentPerson.getName());
-        tfGeburtsdatum.setText(reanrangeDate(currentPerson.getGeburtsdatum()));
+        tfBirthDate.setText(rearrangeDate(currentPerson.getGeburtsdatum()));
         tfPlz.setText(currentPerson.getPlz());
         tfOrt.setText(currentPerson.getOrt());
-        tfStrasse.setText(currentPerson.getStrasse());
-        tfHausnummer.setText(currentPerson.getHausnummer());
+        tfStreet.setText(currentPerson.getStrasse());
+        tfHouseNumber.setText(currentPerson.getHausnummer());
     }
 
     @FXML
@@ -277,10 +273,10 @@ public class HelloController {
 
     private void setStatus(boolean b) {
         if (b) {
-            lblStatus.setText("Karte gefunden!");
+            lblStatus.setText(CARD_FOUND);
             lblStatus.setBackground(new Background(new BackgroundFill(Color.GREEN, new CornerRadii(10.0), new Insets(-5.0))));
         } else {
-            lblStatus.setText("Keine Karte gefunden!");
+            lblStatus.setText(NO_CARD_FOUND);
             lblStatus.setBackground(new Background(new BackgroundFill(Color.YELLOW, new CornerRadii(10.0), new Insets(-5.0))));
         }
     }
@@ -296,21 +292,21 @@ public class HelloController {
     @SuppressWarnings("DuplicatedCode")
     private boolean validate() {
         ArrayList<Boolean> results = new ArrayList<>();
-        results.add(validate(cbGeschlecht));
-        results.add(validate(tfVorname));
+        results.add(validate(cbGender));
+        results.add(validate(tfFirstname));
         results.add(validate(tfName));
-        results.add(validate(tfGeburtsdatum));
+        results.add(validate(tfBirthDate));
         results.add(validate(tfPlz));
         results.add(validate(tfOrt));
-        results.add(validate(tfStrasse));
-        results.add(validate(tfHausnummer));
-        results.add(validate(tfTelefon));
-        results.add(validate(cbBriefkontakt));
-        results.add(validate(cbImpfserie));
+        results.add(validate(tfStreet));
+        results.add(validate(tfHouseNumber));
+        results.add(validate(tfPhoneNumber));
+        results.add(validate(cbPostalContact));
+        results.add(validate(cbVaccinationNumber));
         results.add(validate(tfCharge));
-        results.add(validate(dpImpfdatum));
+        results.add(validate(dpVaccinationDate));
         results.add(validate(cbJUJ));
-        results.add(validate(cbGenesen));
+        results.add(validate(cbCured));
 
         if (tfTime.getText() != null && !tfTime.getText().isEmpty()) {
             final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
@@ -330,10 +326,10 @@ public class HelloController {
         }
 
         try {
-            Long.parseLong(tfTelefon.getText());
-            tfTelefon.setBorder(baseBorder);
+            Long.parseLong(tfPhoneNumber.getText());
+            tfPhoneNumber.setBorder(baseBorder);
         } catch (NumberFormatException e) {
-            tfTelefon.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+            tfPhoneNumber.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
             results.add(true);
         }
 
@@ -367,7 +363,7 @@ public class HelloController {
 
                     try {
                         Date format = dateFormat.parse(text);
-                        ((DatePicker) field).setValue(convertToLocalDateViaMilisecond(format));
+                        ((DatePicker) field).setValue(convertToLocalDate(format));
                     } catch (ParseException e) {
                         error = true;
                     }
@@ -388,7 +384,7 @@ public class HelloController {
         return error;
     }
 
-    public LocalDate convertToLocalDateViaMilisecond(Date dateToConvert) {
+    public LocalDate convertToLocalDate(Date dateToConvert) {
         return dateToConvert.toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
@@ -396,41 +392,40 @@ public class HelloController {
 
     private void write() throws IOException {
         String newLine = String.format("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%02d.%02d.%s %s;%s;%s\n",
-                cbGeschlecht.getValue(),
-                tfVorname.getText().replaceAll("ö", "oe")
-                        .replaceAll("ä", "ae")
-                        .replaceAll("ü", "ue")
-                        .replaceAll("Ö", "Oe")
-                        .replaceAll("Ä", "Ae")
-                        .replaceAll("Ü", "Ue"),
-                tfName.getText().replaceAll("ö", "oe")
-                        .replaceAll("ä", "ae")
-                        .replaceAll("ü", "ue")
-                        .replaceAll("Ö", "Oe")
-                        .replaceAll("Ä", "Ae")
-                        .replaceAll("Ü", "Ue"),
-                tfGeburtsdatum.getText(),
+                cbGender.getValue(),
+                replaceUmlauts(tfFirstname.getText()),
+                replaceUmlauts(tfName.getText()),
+                tfBirthDate.getText(),
                 tfPlz.getText(),
                 tfOrt.getText(),
-                tfStrasse.getText(),
-                tfHausnummer.getText(),
-                tfAdresszusatz.getText(),
-                tfTelefon.getText(),
+                tfStreet.getText(),
+                tfHouseNumber.getText(),
+                tfStreetAddition.getText(),
+                tfPhoneNumber.getText(),
                 tfEmail.getText(),
-                cbBriefkontakt.getValue(),
-                cbImpfserie.getValue(),
+                cbPostalContact.getValue(),
+                cbVaccinationNumber.getValue(),
                 tfCharge.getText(),
-                dpImpfdatum.getValue().getDayOfMonth(), dpImpfdatum.getValue().getMonthValue(), dpImpfdatum.getValue().getYear(),
+                dpVaccinationDate.getValue().getDayOfMonth(), dpVaccinationDate.getValue().getMonthValue(), dpVaccinationDate.getValue().getYear(),
                 tfTime.getText(),
                 cbJUJ.getValue(),
-                cbGenesen.getValue());
+                cbCured.getValue());
 
         newLine = newLine.replaceAll("null", "");
 
         personTableData.add(new PersonTableData(files.get(((RadioButton) vaccine.getSelectedToggle()).getText()), newLine.split(";", -1)));
     }
 
-    private String reanrangeDate(String date) {
+    private String replaceUmlauts(String s) {
+        return s.replaceAll("ö", "oe")
+                .replaceAll("ä", "ae")
+                .replaceAll("ü", "ue")
+                .replaceAll("Ö", "Oe")
+                .replaceAll("Ä", "Ae")
+                .replaceAll("Ü", "Ue");
+    }
+
+    private String rearrangeDate(String date) {
         String[] split = date.split("");
         return split[6] + split[7] + "." + split[4] + split[5] + "." + split[0] + split[1] + split[2] + split[3];
     }
@@ -447,7 +442,7 @@ public class HelloController {
 
     @FXML
     public void setDateToday() {
-        dpImpfdatum.setValue(LocalDate.now());
+        dpVaccinationDate.setValue(LocalDate.now());
     }
 
     public void shutdown() {
@@ -455,8 +450,8 @@ public class HelloController {
     }
 
     private void saveData() {
-        HashMap<File, List<String>> blub = new HashMap<>();
-        files.forEach((key, value) -> blub.put(value, new ArrayList<>()));
+        HashMap<File, List<String>> fileAndEntryMap = new HashMap<>();
+        files.forEach((key, value) -> fileAndEntryMap.put(value, new ArrayList<>()));
 
         personTableData.forEach(entity -> {
             String newLine = String.format("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s\n",
@@ -478,12 +473,12 @@ public class HelloController {
                     entity.getErstimpfungJuJ(),
                     entity.getGenesenen_Bescheinigung());
 
-            blub.get(entity.getVaccine()).add(newLine);
+            fileAndEntryMap.get(entity.getVaccine()).add(newLine);
         });
 
         files.forEach((key, value) -> value.delete());
 
-        blub.forEach((key, value) -> value.forEach(line -> {
+        fileAndEntryMap.forEach((key, value) -> value.forEach(line -> {
             try {
                 out.write(key, line);
             } catch (IOException e) {
@@ -493,6 +488,7 @@ public class HelloController {
 
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     private void initTableColumns() {
         c1.setCellValueFactory(new PropertyValueFactory<>("Anrede"));
         c2.setCellValueFactory(new PropertyValueFactory<>("Vorname"));
@@ -550,27 +546,27 @@ public class HelloController {
     }
 
     private void setChoiceBoxValues() {
-        cbGeschlecht.getItems().add("");
-        cbGeschlecht.getItems().add("M");
-        cbGeschlecht.getItems().add("W");
-        cbGeschlecht.getItems().add("D");
+        cbGender.getItems().add("");
+        cbGender.getItems().add("M");
+        cbGender.getItems().add("W");
+        cbGender.getItems().add("D");
 
-        cbBriefkontakt.getItems().add("0");
-        cbBriefkontakt.getItems().add("1");
-        cbBriefkontakt.setValue("1");
+        cbPostalContact.getItems().add("0");
+        cbPostalContact.getItems().add("1");
+        cbPostalContact.setValue("1");
 
-        cbImpfserie.getItems().add("");
-        cbImpfserie.getItems().add("1");
-        cbImpfserie.getItems().add("2");
-        cbImpfserie.getItems().add("3");
+        cbVaccinationNumber.getItems().add("");
+        cbVaccinationNumber.getItems().add("1");
+        cbVaccinationNumber.getItems().add("2");
+        cbVaccinationNumber.getItems().add("3");
 
         cbJUJ.getItems().add("0");
         cbJUJ.getItems().add("1");
         cbJUJ.setValue("0");
 
-        cbGenesen.getItems().add("0");
-        cbGenesen.getItems().add("1");
-        cbGenesen.setValue("0");
+        cbCured.getItems().add("0");
+        cbCured.getItems().add("1");
+        cbCured.setValue("0");
     }
 
     private void setCellFactory(TableColumn<PersonTableData, String> c) {

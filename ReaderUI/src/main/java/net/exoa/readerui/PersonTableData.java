@@ -2,6 +2,7 @@ package net.exoa.readerui;
 
 import java.io.File;
 
+@SuppressWarnings("SpellCheckingInspection")
 public class PersonTableData {
 
     String Anrede;
@@ -26,11 +27,6 @@ public class PersonTableData {
     public File getVaccine() {
         return vaccine;
     }
-
-    public void setVaccine(File vaccine) {
-        this.vaccine = vaccine;
-    }
-
 
     public PersonTableData(File vaccine, String... data) {
         this.vaccine = vaccine;

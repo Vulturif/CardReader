@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class Output {
 
+    @SuppressWarnings("SpellCheckingInspection")
     public static final String HEADER = "Anrede (M,F,D);Vorname;Nachname;Geburtsdatum;Plz;Ort;Strasse;StrasseNr;Adresszusatz;Telefon;Email;Briefkontakt (1,0);Impfserie(1,2,3);Charge;Impfdatum(TT.MM.JJJJ H24:MI);Erstimpfung Johnson&Johnson (1,0);Genesenen-Bescheinigung (1,0)\n";
 
     public void write(File file, String newLine) throws IOException {
