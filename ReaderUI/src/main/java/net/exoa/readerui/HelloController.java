@@ -330,7 +330,7 @@ public class HelloController {
         }
 
         try {
-            Integer.parseInt(tfTelefon.getText());
+            Long.parseLong(tfTelefon.getText());
             tfTelefon.setBorder(baseBorder);
         } catch (NumberFormatException e) {
             tfTelefon.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
@@ -359,8 +359,6 @@ public class HelloController {
         }
 
         if (field instanceof DatePicker) {
-            LocalDate date = ((DatePicker) field).getValue();
-//            if (date == null) {
             String text = ((DatePicker) field).getEditor().getText();
             if (text != null && !text.trim().isEmpty()) {
                 if (text.matches("^(?:31([/\\-.])(?:0?[13578]|1[02]|(?:Jan|Mar|May|Jul|Aug|Oct|Dec))\\1|(?:29|30)([/\\-.])(?:0?[1,3-9]|1[0-2]|(?:Jan|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec))\\2)(?:1[6-9]|[2-9]\\d)?\\d{2}$|^29([/\\-.])(?:0?2|Feb)\\3(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:16|[2468][048]|[3579][26])00)$|^(?:0?[1-9]|1\\d|2[0-8])([/\\-.])(?:(?:0?[1-9]|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep))|(?:1[0-2]|(?:Oct|Nov|Dec)))\\4(?:1[6-9]|[2-9]\\d)?\\d{2}$")) {
@@ -370,7 +368,6 @@ public class HelloController {
                     try {
                         Date format = dateFormat.parse(text);
                         ((DatePicker) field).setValue(convertToLocalDateViaMilisecond(format));
-//                        final Calendar calendar = Calendar.getInstance();
                     } catch (ParseException e) {
                         error = true;
                     }
@@ -378,7 +375,6 @@ public class HelloController {
             } else {
                 error = true;
             }
-//            }
         } else {
             error = value == null || value.trim().isEmpty();
         }
@@ -447,6 +443,11 @@ public class HelloController {
     @FXML
     public void openSettings() {
 
+    }
+
+    @FXML
+    public void setDateToday() {
+        dpImpfdatum.setValue(LocalDate.now());
     }
 
     public void shutdown() {

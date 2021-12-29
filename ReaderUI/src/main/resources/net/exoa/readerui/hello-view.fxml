@@ -109,6 +109,11 @@
                                     <TextField fx:id="tfTime" GridPane.columnIndex="4" GridPane.rowIndex="2" />
                                     <ChoiceBox fx:id="cbJUJ" prefWidth="150.0" GridPane.columnIndex="4" GridPane.rowIndex="3" />
                                     <ChoiceBox fx:id="cbGenesen" prefWidth="150.0" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+                                   <Button mnemonicParsing="false" onAction="#setDateToday" text="Heute" GridPane.columnIndex="5" GridPane.rowIndex="1">
+                                      <GridPane.margin>
+                                         <Insets left="5.0" />
+                                      </GridPane.margin>
+                                   </Button>
                                 </GridPane>
                             </AnchorPane>
                         </TitledPane>
