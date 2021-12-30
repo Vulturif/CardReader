@@ -22,7 +22,7 @@
             <Tab closable="false" text="Datenerfassung">
                 <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefWidth="200.0">
                     <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
-                        <TitledPane contentDisplay="TOP" maxHeight="300.0" maxWidth="800.0" prefHeight="183.0" prefWidth="780.0" text="Ausgelesene Daten:">
+                        <TitledPane contentDisplay="TOP" focusTraversable="false" maxHeight="300.0" maxWidth="800.0" prefHeight="183.0" prefWidth="780.0" text="Ausgelesene Daten:">
                             <effect>
                                 <Blend />
                             </effect>
@@ -65,7 +65,7 @@
                                 </GridPane>
                             </AnchorPane>
                         </TitledPane>
-                        <TitledPane maxWidth="800.0" text="Zusätzliche Daten:">
+                        <TitledPane focusTraversable="false" maxWidth="800.0" text="Zusätzliche Daten:">
                             <padding>
                                 <Insets top="10.0" />
                             </padding>
@@ -120,7 +120,7 @@
                                 </GridPane>
                             </AnchorPane>
                         </TitledPane>
-                        <TitledPane fx:id="vacBox" maxWidth="800.0" text="Vaccine">
+                        <TitledPane fx:id="vacBox" focusTraversable="false" maxWidth="800.0" text="Vaccine">
                             <padding>
                                 <Insets top="10.0" />
                             </padding>
@@ -166,21 +166,21 @@
                                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                     </HBox.margin>
                                 </Button>
-                                <Button alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#cleanUp" text="Felder leeren">
+                                <Button alignment="CENTER_RIGHT" focusTraversable="false" mnemonicParsing="false" onAction="#cleanUp" text="Felder leeren">
                                     <HBox.margin>
                                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                     </HBox.margin>
                                 </Button>
-                                <CheckBox fx:id="cbAutoSave" mnemonicParsing="false" onAction="#checkAutoSave" text="Automatisch beim Entfernen der Karte Speichern">
+                                <CheckBox fx:id="cbAutoSave" focusTraversable="false" mnemonicParsing="false" onAction="#checkAutoSave" text="Automatisch beim Entfernen der Karte Speichern">
                                     <HBox.margin>
                                         <Insets bottom="10.0" left="10.0" right="10.0" top="15.0" />
                                     </HBox.margin>
                                 </CheckBox>
                             </HBox>
                             <Group>
-                                <Label layoutY="4.0" text="Staus:" />
-                                <Label fx:id="lblStatus" layoutX="42.0" layoutY="4.0" />
-                                <ChoiceBox fx:id="cbReader" layoutX="279.0" prefHeight="25.0" prefWidth="492.0" />
+                                <Label focusTraversable="false" layoutY="4.0" text="Staus:" />
+                                <Label fx:id="lblStatus" focusTraversable="false" layoutX="42.0" layoutY="4.0" />
+                                <ChoiceBox fx:id="cbReader" focusTraversable="false" layoutX="279.0" prefHeight="25.0" prefWidth="492.0" />
                             </Group>
                         </VBox>
                     </VBox>
