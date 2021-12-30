@@ -11,11 +11,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import net.exoa.logic.*;
+import net.exoa.readerui.Launcher;
 import net.exoa.readerui.PersonTableData;
 
 import javax.smartcardio.CardException;
@@ -443,15 +445,17 @@ public class CardReaderUiController {
     }
 
     @FXML
+    //TODO
     public void openSettings() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Settings.fxml"));
-        Parent parent = fxmlLoader.load();
-
-        Scene scene = new Scene(parent);
-        Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setScene(scene);
-        stage.showAndWait();
+//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Settings.fxml"));
+//        Parent parent = fxmlLoader.load();
+//
+//        Scene scene = new Scene(parent);
+//        Stage stage = new Stage();
+//        stage.getIcons().add(new Image(Objects.requireNonNull(Launcher.class.getClassLoader().getResourceAsStream("CardReader.png"))));
+//        stage.initModality(Modality.APPLICATION_MODAL);
+//        stage.setScene(scene);
+//        stage.showAndWait();
     }
 
     @FXML
@@ -462,6 +466,7 @@ public class CardReaderUiController {
 
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
+        stage.getIcons().add(new Image(Objects.requireNonNull(Launcher.class.getClassLoader().getResourceAsStream("CardReader.png"))));
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
         stage.showAndWait();

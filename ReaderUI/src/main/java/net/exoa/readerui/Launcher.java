@@ -18,7 +18,7 @@ public class Launcher extends Application {
             stage.setMinHeight(700);
             stage.setMinWidth(900);
             stage.setTitle("CardReader");
-            stage.getIcons().add(new Image(Objects.requireNonNull(Launcher.class.getClassLoader().getResourceAsStream("malteser.png"))));
+            stage.getIcons().add(new Image(Objects.requireNonNull(Launcher.class.getClassLoader().getResourceAsStream("CardReader.png"))));
             stage.setScene(scene);
             ((CardReaderUiController) fxmlLoader.getController()).setHostService(getHostServices());
             stage.setOnHidden(e -> ((CardReaderUiController) fxmlLoader.getController()).shutdown());
