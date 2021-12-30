@@ -7,3 +7,5 @@ Latest Version: 1.1.4
 Download latest Version: https://github.com/Vulturif/CardReader/releases/latest
 
 Sollten zusätzliche featutures, eine Allgemeine Anpassung nötig sein oder ein bug zu fixen, einfach einen Issue öffnen oder sich direkt melden
+
+Das ganze wird Kostenlos auf einer "Pay-what-you-want" bases bereitgestellt. (Ein Zahlungslink folg ;))
