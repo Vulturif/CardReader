@@ -30,7 +30,7 @@ import java.util.prefs.*;
 import static net.exoa.logic.Constants.*;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
-public class HelloController {
+public class CardReaderUiController {
 
     @FXML
     private Label lblStatus;
@@ -130,14 +130,14 @@ public class HelloController {
     private TimerTask task;
     private TimerTask saveTask;
 
-    private final Preferences prefs = Preferences.userNodeForPackage(net.exoa.readerui.HelloController.class);
+    private final Preferences prefs = Preferences.userNodeForPackage(CardReaderUiController.class);
 
     Border baseBorder;
 
     private final ObservableList<PersonTableData> personTableData = FXCollections.observableArrayList();
     private boolean reRead = true;
 
-    public HelloController() {
+    public CardReaderUiController() {
         buildTask();
         cardTerminals = reader.listTerminals();
         if (!cardTerminals.isEmpty()) {
