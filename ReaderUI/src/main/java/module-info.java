@@ -14,4 +14,6 @@ module net.exoa.readerui {
 
     opens net.exoa.readerui to javafx.fxml;
     exports net.exoa.readerui;
+    exports net.exoa.readerui.fxml;
+    opens net.exoa.readerui.fxml to javafx.fxml;
 }

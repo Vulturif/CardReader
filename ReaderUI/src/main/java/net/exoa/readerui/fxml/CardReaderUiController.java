@@ -1,4 +1,4 @@
-package net.exoa.readerui;
+package net.exoa.readerui.fxml;
 
 import javafx.application.HostServices;
 import javafx.application.Platform;
@@ -16,6 +16,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import net.exoa.logic.*;
+import net.exoa.readerui.PersonTableData;
 
 import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
@@ -442,17 +443,23 @@ public class CardReaderUiController {
     }
 
     @FXML
-    public void openSettings() {
+    public void openSettings() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Settings.fxml"));
+        Parent parent = fxmlLoader.load();
 
+        Scene scene = new Scene(parent);
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.showAndWait();
     }
 
     @FXML
     public void openAbout() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("About.fxml"));
         Parent parent = fxmlLoader.load();
-//        AddPersonDialogController dialogController = fxmlLoader.<AddPersonDialogController>getController();
-//        dialogController.setAppMainObservableList(tvObservableList);
         ((AboutController) fxmlLoader.getController()).setHostService(service);
+
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);

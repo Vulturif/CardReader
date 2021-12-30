@@ -1,12 +1,9 @@
-package net.exoa.readerui;
+package net.exoa.readerui.fxml;
 
 import javafx.application.HostServices;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
-
-import java.io.IOException;
-
 
 public class AboutController {
 
@@ -29,6 +26,4 @@ public class AboutController {
     public void setHostService(HostServices service) {
         this.service = service;
     }
-
-
 }

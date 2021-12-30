@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import net.exoa.readerui.fxml.CardReaderUiController;
 
 import java.util.Objects;
 
@@ -12,7 +13,7 @@ public class Launcher extends Application {
     @Override
     public void start(Stage stage) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("CardReaderUi.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxml/CardReaderUi.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 800, 600);
             stage.setMinHeight(700);
             stage.setMinWidth(900);
