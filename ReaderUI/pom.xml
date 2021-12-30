@@ -100,14 +100,16 @@
                     <version>1.4.0</version>
                     <configuration>
                         <name>CardReader</name>
-                        <appVersion>1.0.0</appVersion>
-                        <vendor>net.exoa</vendor>
-                        <destination>target/dist2</destination>
+                        <appVersion>1.1.3</appVersion>
+                        <vendor>Hendrik Jongebloed</vendor>
+                        <destination>target/dist</destination>
                         <module>net.exoa.readerui/net.exoa.readerui.Launcher</module>
                         <runtimeImage>target/CardReaderImage</runtimeImage>
+                        <type>EXE</type>
                         <winDirChooser>true</winDirChooser>
                         <winMenu>true</winMenu>
                         <winShortcut>true</winShortcut>
+                        <icon>src/main/resources/CardReader.ico</icon>
                         <javaOptions>
                             <option>-Dfile.encoding=UTF-8</option>
                         </javaOptions>
@@ -132,7 +134,7 @@
                             <id>default-cli</id>
                             <configuration>
                                 <mainClass>net.exoa.readerui/net.exoa.readerui.Launcher</mainClass>
-                                <launcher>CardReader</launcher>
+                                <launcher>CardReader.bat</launcher>
                                 <jlinkZipName>CardReaderZip</jlinkZipName>
                                 <jlinkImageName>CardReaderImage</jlinkImageName>
                                 <noManPages>true</noManPages>
