@@ -178,8 +178,8 @@
                                 </CheckBox>
                             </HBox>
                             <Group>
-                                <Label focusTraversable="false" layoutY="4.0" text="Staus:" />
-                                <Label fx:id="lblStatus" focusTraversable="false" layoutX="42.0" layoutY="4.0" />
+                                <Label layoutY="4.0" text="Staus:" />
+                                <Label fx:id="lblStatus" layoutX="42.0" layoutY="4.0" />
                                 <ChoiceBox fx:id="cbReader" focusTraversable="false" layoutX="279.0" prefHeight="25.0" prefWidth="492.0" />
                             </Group>
                         </VBox>
