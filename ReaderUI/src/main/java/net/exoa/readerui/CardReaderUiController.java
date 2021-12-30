@@ -1,16 +1,21 @@
 package net.exoa.readerui;
 
+import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import net.exoa.logic.*;
-import net.exoa.readerui.util.CellValueFactoryHelper;
 
 import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
@@ -442,6 +447,20 @@ public class CardReaderUiController {
     }
 
     @FXML
+    public void openAbout() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("About.fxml"));
+        Parent parent = fxmlLoader.load();
+//        AddPersonDialogController dialogController = fxmlLoader.<AddPersonDialogController>getController();
+//        dialogController.setAppMainObservableList(tvObservableList);
+        ((AboutController) fxmlLoader.getController()).setHostService(service);
+        Scene scene = new Scene(parent);
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.showAndWait();
+    }
+
+    @FXML
     public void setDateToday() {
         dpVaccinationDate.setValue(LocalDate.now());
     }
@@ -556,5 +575,11 @@ public class CardReaderUiController {
         cbCured.getItems().add("0");
         cbCured.getItems().add("1");
         cbCured.setValue("0");
+    }
+
+    private HostServices service;
+
+    public void setHostService(HostServices service) {
+        this.service = service;
     }
 }

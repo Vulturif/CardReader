@@ -13,7 +13,7 @@
                 <MenuItem mnemonicParsing="false" onAction="#openSettings" text="Einstellung" />
             </Menu>
             <Menu mnemonicParsing="false" text="?">
-                <MenuItem mnemonicParsing="false" text="Info" />
+                <MenuItem mnemonicParsing="false" onAction="#openAbout" text="Info" />
             </Menu>
         </MenuBar>
     </top>
