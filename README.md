@@ -11,5 +11,18 @@ Das ganze wird Kostenlos auf einer "Pay-what-you-want" Bases bereitgestellt. (Ei
 Geplante Erweiterungen: [Enhancements](https://github.com/Vulturif/CardReader/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement)
 
 
-Rein aus Interesse würde mich eine Mitteilung der Impfzentren interessieren, die die Application verwenden. 
+Rein aus Interesse würde mich eine Mitteilung der Impfzentren interessieren, die die Application verwenden. Ich würde daraus gerne eine "Kunden" Liste erstellen.
+
+Beispielmeldung:
+```
+Impfzentrum:
+Kreis:
+Mit Veröffentlichung einverstanden:
+```
+
 Es werden keinerlei Daten erhoben, übermittelt oder extern ausgewertet.
+
+
+
+##Aktuelle Einsatzorte:
+- Liste folgt
