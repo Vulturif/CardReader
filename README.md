@@ -13,6 +13,8 @@ Geplante Erweiterungen: [Enhancements](https://github.com/Vulturif/CardReader/is
 
 Rein aus Interesse würde mich eine Mitteilung der Impfzentren interessieren, die die Application verwenden. Ich würde daraus gerne eine "Kunden" Liste erstellen.
 
+Kontakt: [Hendrik Jongebloed](mailto:vulturif1@gmailqcom?subject=[GitHub]%20Impfzentrum%20Nutzungsmeldung)
+
 Beispielmeldung:
 ```
 Impfzentrum:
