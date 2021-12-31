@@ -9,3 +9,7 @@ Sollten zusätzliche featutures, eine Allgemeine Anpassung nötig sein oder ein 
 Das ganze wird Kostenlos auf einer "Pay-what-you-want" bases bereitgestellt. (Ein Zahlungslink folg ;))
 
 Geplante erweiterungen: [Enhancements](https://github.com/Vulturif/CardReader/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement)
+
+
+Rein aus Interesse würde mich eine Mitteilung der Impfzentren interessieren, die die Application verwenden. 
+Es werden keinerlei Daten erhoben, übermittelt oder extern ausgewertet.
