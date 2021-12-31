@@ -1,4 +1,4 @@
-package net.exoa.readerui.fxml;
+package net.vulturif.readerui.fxml;
 
 public class SettingsController {
 }

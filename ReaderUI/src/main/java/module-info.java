@@ -1,4 +1,4 @@
-module net.exoa.readerui {
+module net.vulturif.readerui {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
@@ -8,12 +8,12 @@ module net.exoa.readerui {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     //requires eu.hansolo.tilesfx;
-    requires net.exoa.readerbl;
+    requires net.vulturif.readerbl;
     requires java.smartcardio;
     requires java.prefs;
 
-    opens net.exoa.readerui to javafx.fxml;
-    exports net.exoa.readerui;
-    exports net.exoa.readerui.fxml;
-    opens net.exoa.readerui.fxml to javafx.fxml;
+    opens net.vulturif.readerui to javafx.fxml;
+    opens net.vulturif.readerui.fxml to javafx.fxml;
+    exports net.vulturif.readerui;
+    exports net.vulturif.readerui.fxml;
 }

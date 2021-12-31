@@ -1,4 +1,4 @@
-package net.exoa.logic;
+package net.vulturif.logic;
 
 
 import java.io.File;

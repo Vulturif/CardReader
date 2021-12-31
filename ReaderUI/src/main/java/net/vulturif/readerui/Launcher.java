@@ -1,11 +1,11 @@
-package net.exoa.readerui;
+package net.vulturif.readerui;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import net.exoa.readerui.fxml.CardReaderUiController;
+import net.vulturif.readerui.fxml.CardReaderUiController;
 
 import java.util.Objects;
 

@@ -1,4 +1,4 @@
-package net.exoa.readerui;
+package net.vulturif.readerui;
 
 import java.io.File;
 

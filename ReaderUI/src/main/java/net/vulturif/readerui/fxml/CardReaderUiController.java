@@ -1,4 +1,4 @@
-package net.exoa.readerui.fxml;
+package net.vulturif.readerui.fxml;
 
 import javafx.application.HostServices;
 import javafx.application.Platform;
@@ -16,9 +16,13 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import net.exoa.logic.*;
-import net.exoa.readerui.Launcher;
-import net.exoa.readerui.PersonTableData;
+import net.vulturif.logic.CardReader;
+import net.vulturif.logic.Input;
+import net.vulturif.logic.Output;
+import net.vulturif.logic.Person;
+import net.vulturif.readerui.Launcher;
+import net.vulturif.readerui.PersonTableData;
+import net.vulturif.readerui.util.CellValueFactoryHelper;
 
 import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
@@ -32,11 +36,9 @@ import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.prefs.Preferences;
 
-import java.util.prefs.*;
-
-import static net.exoa.logic.Constants.*;
-import static net.exoa.readerui.util.CellValueFactoryHelper.*;
+import static net.vulturif.logic.Constants.*;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class CardReaderUiController {
@@ -521,23 +523,23 @@ public class CardReaderUiController {
     }
 
     private void initTableColumns() {
-        c1.setCellValueFactory(ANREDE);
-        c2.setCellValueFactory(VORNAME);
-        c3.setCellValueFactory(NACHNAME);
-        c4.setCellValueFactory(GEBURTSDATUM);
-        c5.setCellValueFactory(PLZ);
-        c6.setCellValueFactory(ORT);
-        c7.setCellValueFactory(STRASSE);
-        c8.setCellValueFactory(STRASSE_NR);
-        c9.setCellValueFactory(ADRESSZUSATZ);
-        c10.setCellValueFactory(TELEFON);
-        c11.setCellValueFactory(EMAIL);
-        c12.setCellValueFactory(BRIEFKONTAKT);
-        c13.setCellValueFactory(IMPFSERIE);
-        c14.setCellValueFactory(CHARGE);
-        c15.setCellValueFactory(IMPFDATUM);
-        c16.setCellValueFactory(ERSTIMPFUNG_JUJ);
-        c17.setCellValueFactory(GENESENEN_BESCHEINIGUNG);
+        c1.setCellValueFactory(CellValueFactoryHelper.ANREDE);
+        c2.setCellValueFactory(CellValueFactoryHelper.VORNAME);
+        c3.setCellValueFactory(CellValueFactoryHelper.NACHNAME);
+        c4.setCellValueFactory(CellValueFactoryHelper.GEBURTSDATUM);
+        c5.setCellValueFactory(CellValueFactoryHelper.PLZ);
+        c6.setCellValueFactory(CellValueFactoryHelper.ORT);
+        c7.setCellValueFactory(CellValueFactoryHelper.STRASSE);
+        c8.setCellValueFactory(CellValueFactoryHelper.STRASSE_NR);
+        c9.setCellValueFactory(CellValueFactoryHelper.ADRESSZUSATZ);
+        c10.setCellValueFactory(CellValueFactoryHelper.TELEFON);
+        c11.setCellValueFactory(CellValueFactoryHelper.EMAIL);
+        c12.setCellValueFactory(CellValueFactoryHelper.BRIEFKONTAKT);
+        c13.setCellValueFactory(CellValueFactoryHelper.IMPFSERIE);
+        c14.setCellValueFactory(CellValueFactoryHelper.CHARGE);
+        c15.setCellValueFactory(CellValueFactoryHelper.IMPFDATUM);
+        c16.setCellValueFactory(CellValueFactoryHelper.ERSTIMPFUNG_JUJ);
+        c17.setCellValueFactory(CellValueFactoryHelper.GENESENEN_BESCHEINIGUNG);
 
         //noinspection unchecked
         tvCurrent.getColumns().forEach(column -> ((TableColumn<PersonTableData, String>) column).setCellFactory(TextFieldTableCell.forTableColumn()));

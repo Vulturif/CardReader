@@ -1,7 +1,7 @@
-module net.exoa.readerbl {
+module net.vulturif.readerbl {
     requires java.smartcardio;
     requires java.xml;
 
-    opens net.exoa.logic;
-    exports net.exoa.logic;
+    opens net.vulturif.logic;
+    exports net.vulturif.logic;
 }

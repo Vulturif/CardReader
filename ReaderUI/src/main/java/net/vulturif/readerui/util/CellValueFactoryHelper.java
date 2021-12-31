@@ -1,7 +1,7 @@
-package net.exoa.readerui.util;
+package net.vulturif.readerui.util;
 
 import javafx.scene.control.cell.PropertyValueFactory;
-import net.exoa.readerui.PersonTableData;
+import net.vulturif.readerui.PersonTableData;
 
 public class CellValueFactoryHelper {
     public static final PropertyValueFactory<PersonTableData, String> ANREDE = new PropertyValueFactory<>("Anrede");

@@ -1,4 +1,4 @@
-package net.exoa.readerui.fxml;
+package net.vulturif.readerui.fxml;
 
 import javafx.application.HostServices;
 import javafx.fxml.FXML;

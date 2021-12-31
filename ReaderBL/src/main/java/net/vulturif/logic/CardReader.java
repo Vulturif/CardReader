@@ -1,4 +1,4 @@
-package net.exoa.logic;
+package net.vulturif.logic;
 
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.*;
