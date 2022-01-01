@@ -3,22 +3,20 @@ package net.vulturif.readerui;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import net.vulturif.readerui.fxml.CardReaderUiController;
-
-import java.util.Objects;
+import net.vulturif.readerui.util.PrefHelper;
 
 public class Launcher extends Application {
     @Override
     public void start(Stage stage) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxml/CardReaderUi.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), 800, 600);
-            stage.setMinHeight(700);
-            stage.setMinWidth(900);
+            Scene scene = new Scene(fxmlLoader.load(), 950, 700);
+            stage.setMinHeight(750);
+            stage.setMinWidth(1000);
             stage.setTitle("CardReader");
-            stage.getIcons().add(new Image(Objects.requireNonNull(Launcher.class.getClassLoader().getResourceAsStream("CardReader.png"))));
+            stage.getIcons().add(PrefHelper.getInstance().getIcon());
             stage.setScene(scene);
             ((CardReaderUiController) fxmlLoader.getController()).setHostService(getHostServices());
             stage.setOnHidden(e -> ((CardReaderUiController) fxmlLoader.getController()).shutdown());

@@ -3,14 +3,24 @@ package net.vulturif.readerui.fxml;
 import javafx.application.HostServices;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import net.vulturif.readerui.util.PrefHelper;
 
 public class AboutController {
 
     @FXML
     private Button closeButton;
+    @FXML
+    private Label version;
 
     private HostServices service;
+
+
+    @FXML
+    private void initialize() {
+        version.setText(PrefHelper.getInstance().getVersion());
+    }
 
     @FXML
     public void openWebsite() {

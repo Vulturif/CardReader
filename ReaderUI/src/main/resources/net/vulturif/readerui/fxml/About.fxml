@@ -26,9 +26,9 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <Label text="Version:" GridPane.rowIndex="1" />
-            <Label contentDisplay="CENTER" text="v1.1.5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Label fx:id="version" contentDisplay="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1">
                 <font>
-                    <Font name="System Bold" size="12.0" />
+                    <Font name="System Bold" size="12.0"/>
                 </font>
             </Label>
             <Label text="Author:" GridPane.rowIndex="2" />
