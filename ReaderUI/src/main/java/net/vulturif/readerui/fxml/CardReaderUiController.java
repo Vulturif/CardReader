@@ -2,6 +2,7 @@ package net.vulturif.readerui.fxml;
 
 import javafx.application.HostServices;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -9,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
@@ -93,6 +95,7 @@ public class CardReaderUiController {
     private ToggleGroup vaccine;
     @FXML
     private TitledPane vacBox;
+    PieChart.Data genderM = new PieChart.Data("M", 0);
     @FXML
     private TableColumn<PersonTableData, String> c1;
     @FXML
@@ -147,6 +150,10 @@ public class CardReaderUiController {
 
     private final ObservableList<PersonTableData> personTableData = FXCollections.observableArrayList();
     private boolean reRead = true;
+    PieChart.Data genderW = new PieChart.Data("W", 0);
+    PieChart.Data genderD = new PieChart.Data("D", 0);
+    @FXML
+    private PieChart pieGender;
 
     public CardReaderUiController() {
         buildTask();
@@ -274,11 +281,24 @@ public class CardReaderUiController {
         LocalDate current_date = LocalDate.now();
         vaccine.getToggles().stream().map(toggle -> ((RadioButton) toggle)).forEach(radioButton -> files.put(radioButton.getText(), new File(filePath + String.format("\\Impfung_%d%02d%02d_HHMM_%s.csv", current_date.getYear() - 2000, current_date.getMonthValue(), current_date.getDayOfMonth(), radioButton.getText()))));
 
+        pieGender.getData().add(genderM);
+        pieGender.getData().add(genderW);
+        pieGender.getData().add(genderD);
+
+        pieGender.getData().forEach(data ->
+                data.nameProperty().bind(
+                        Bindings.concat(
+                                data.getName(), ": ", data.pieValueProperty()
+                        )
+                )
+        );
+
         readCSV();
     }
 
     private void readCSV() {
         files.forEach((key, value) -> in.readData(value).stream().filter(line -> line.length == 17).forEach(line -> personTableData.add(new PersonTableData(value, line))));
+        personTableData.forEach(ptData -> updateGenderChart(ptData.getAnrede()));
     }
 
 
@@ -425,6 +445,16 @@ public class CardReaderUiController {
         newLine = newLine.replaceAll("null", "");
 
         personTableData.add(new PersonTableData(files.get(((RadioButton) vaccine.getSelectedToggle()).getText()), newLine.split(";", -1)));
+
+        updateGenderChart(cbGender.getValue());
+    }
+
+    private void updateGenderChart(String gender) {
+        switch (gender) {
+            case "M" -> genderM.setPieValue(genderM.getPieValue() + 1);
+            case "W" -> genderW.setPieValue(genderW.getPieValue() + 1);
+            default -> genderD.setPieValue(genderD.getPieValue() + 1);
+        }
     }
 
     private String replaceUmlauts(String s) {
@@ -468,7 +498,7 @@ public class CardReaderUiController {
 
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
-        stage.getIcons().add(new Image(Objects.requireNonNull(Launcher.class.getClassLoader().getResourceAsStream("CardReader.png"))));
+        stage.getIcons().add(new Image(Objects.requireNonNull(Launcher.class.getClassLoader().getResourceAsStream("CardReaderMalteser.png"))));
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
         stage.showAndWait();
