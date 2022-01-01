@@ -25,6 +25,7 @@ import net.vulturif.logic.Person;
 import net.vulturif.readerui.Launcher;
 import net.vulturif.readerui.PersonTableData;
 import net.vulturif.readerui.util.CellValueFactoryHelper;
+import net.vulturif.readerui.util.PrefHelper;
 
 import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
@@ -38,7 +39,6 @@ import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.prefs.Preferences;
 
 import static net.vulturif.logic.Constants.*;
 
@@ -62,19 +62,19 @@ public class CardReaderUiController {
     @FXML
     private TextField tfHouseNumber;
     @FXML
-    private ChoiceBox<String> cbGender;
+    private ComboBox<String> cbGender;
     @FXML
     private ChoiceBox<CardTerminal> cbReader;
     @FXML
-    private ChoiceBox<String> cbCured;
+    private ComboBox<String> cbCured;
     @FXML
-    private ChoiceBox<String> cbJUJ;
+    private ComboBox<String> cbJUJ;
     @FXML
     private DatePicker dpVaccinationDate;
     @FXML
-    private ChoiceBox<String> cbVaccinationNumber;
+    private ComboBox<String> cbVaccinationNumber;
     @FXML
-    private ChoiceBox<String> cbPostalContact;
+    private ComboBox<String> cbPostalContact;
     @FXML
     private TextField tfEmail;
     @FXML
@@ -137,14 +137,14 @@ public class CardReaderUiController {
     private final Output out = new Output();
     private final Input in = new Input();
     private final HashMap<String, File> files = new HashMap<>();
-    private final String filePath;
+    private String filePath;
 
     private List<CardTerminal> cardTerminals;
     private CardTerminal cardTerminal;
     private TimerTask task;
     private TimerTask saveTask;
 
-    private final Preferences prefs = Preferences.userNodeForPackage(CardReaderUiController.class);
+
 
     Border baseBorder;
 
@@ -162,12 +162,7 @@ public class CardReaderUiController {
             cardTerminal = cardTerminals.get(0);
         }
 
-        String PREF_NAME = "path_to_csv";
-        filePath = prefs.get(PREF_NAME, "C:\\tmp");
-        File bla = new File(filePath);
-        if (!bla.exists()) {
-            bla.mkdir();
-        }
+        filePath = PrefHelper.getInstance().getFilePath();
     }
 
     private void buildTask() {
@@ -271,15 +266,15 @@ public class CardReaderUiController {
         executor.scheduleAtFixedRate(task, 2000, 500, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(saveTask, 1, 5, TimeUnit.MINUTES);
 
-        setChoiceBoxValues();
+        setComboBoxValues();
         initTableColumns();
 
         tvCurrent.setItems(personTableData);
 
         baseBorder = tfName.getBorder();
 
-        LocalDate current_date = LocalDate.now();
-        vaccine.getToggles().stream().map(toggle -> ((RadioButton) toggle)).forEach(radioButton -> files.put(radioButton.getText(), new File(filePath + String.format("\\Impfung_%d%02d%02d_HHMM_%s.csv", current_date.getYear() - 2000, current_date.getMonthValue(), current_date.getDayOfMonth(), radioButton.getText()))));
+
+        createFileMap();
 
         pieGender.getData().add(genderM);
         pieGender.getData().add(genderW);
@@ -296,7 +291,14 @@ public class CardReaderUiController {
         readCSV();
     }
 
+    private void createFileMap() {
+        LocalDate current_date = LocalDate.now();
+        files.clear();
+        vaccine.getToggles().stream().map(toggle -> ((RadioButton) toggle)).forEach(radioButton -> files.put(radioButton.getText(), new File(filePath + String.format("\\Impfung_%d%02d%02d_HHMM_%s.csv", current_date.getYear() - 2000, current_date.getMonthValue(), current_date.getDayOfMonth(), radioButton.getText()))));
+    }
+
     private void readCSV() {
+        personTableData.clear();
         files.forEach((key, value) -> in.readData(value).stream().filter(line -> line.length == 17).forEach(line -> personTableData.add(new PersonTableData(value, line))));
         personTableData.forEach(ptData -> updateGenderChart(ptData.getAnrede()));
     }
@@ -380,9 +382,9 @@ public class CardReaderUiController {
         String value = "";
         if (field instanceof TextField) {
             value = ((TextField) field).getText();
-        } else if (field instanceof ChoiceBox<?>) {
+        } else if (field instanceof ComboBox<?>) {
             //noinspection unchecked
-            value = ((ChoiceBox<String>) field).getValue();
+            value = ((ComboBox<String>) field).getValue();
         }
 
         if (field instanceof DatePicker) {
@@ -479,15 +481,20 @@ public class CardReaderUiController {
     @FXML
     //TODO
     public void openSettings() throws IOException {
-//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Settings.fxml"));
-//        Parent parent = fxmlLoader.load();
-//
-//        Scene scene = new Scene(parent);
-//        Stage stage = new Stage();
-//        stage.getIcons().add(new Image(Objects.requireNonNull(Launcher.class.getClassLoader().getResourceAsStream("CardReader.png"))));
-//        stage.initModality(Modality.APPLICATION_MODAL);
-//        stage.setScene(scene);
-//        stage.showAndWait();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Settings.fxml"));
+        Parent parent = fxmlLoader.load();
+        ((SettingsController) fxmlLoader.getController()).setCurrentFilePath(filePath);
+
+        Scene scene = new Scene(parent);
+        Stage stage = new Stage();
+        stage.getIcons().add(new Image(Objects.requireNonNull(Launcher.class.getClassLoader().getResourceAsStream("CardReader.png"))));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.showAndWait();
+
+        filePath = PrefHelper.getInstance().getFilePath();
+        createFileMap();
+        readCSV();
     }
 
     @FXML
@@ -498,7 +505,7 @@ public class CardReaderUiController {
 
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
-        stage.getIcons().add(new Image(Objects.requireNonNull(Launcher.class.getClassLoader().getResourceAsStream("CardReaderMalteser.png"))));
+        stage.getIcons().add(new Image(Objects.requireNonNull(Launcher.class.getClassLoader().getResourceAsStream("CardReader.png"))));
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
         stage.showAndWait();
@@ -597,7 +604,7 @@ public class CardReaderUiController {
         return t.getTableView().getItems().get(t.getTablePosition().getRow());
     }
 
-    private void setChoiceBoxValues() {
+    private void setComboBoxValues() {
         cbGender.getItems().add("");
         cbGender.getItems().add("M");
         cbGender.getItems().add("W");

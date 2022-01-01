@@ -14,9 +14,9 @@ public class Launcher extends Application {
     public void start(Stage stage) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxml/CardReaderUi.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), 800, 600);
-            stage.setMinHeight(700);
-            stage.setMinWidth(900);
+            Scene scene = new Scene(fxmlLoader.load(), 950, 700);
+            stage.setMinHeight(750);
+            stage.setMinWidth(1000);
             stage.setTitle("CardReader");
             stage.getIcons().add(new Image(Objects.requireNonNull(Launcher.class.getClassLoader().getResourceAsStream("CardReader.png"))));
             stage.setScene(scene);
