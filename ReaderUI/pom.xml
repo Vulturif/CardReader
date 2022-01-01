@@ -7,7 +7,7 @@
     <parent>
         <groupId>net.exoa</groupId>
         <artifactId>CardReader</artifactId>
-        <version>1.1.5</version>
+        <version>1.1.6</version>
     </parent>
 
     <artifactId>ReaderUI</artifactId>
@@ -92,6 +92,12 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -100,7 +106,6 @@
                     <version>1.4.0</version>
                     <configuration>
                         <name>CardReader</name>
-                        <appVersion>${project.version}</appVersion>
                         <vendor>Hendrik Jongebloed</vendor>
                         <destination>target/dist</destination>
                         <module>net.vulturif.readerui/net.vulturif.readerui.Launcher</module>
@@ -109,8 +114,9 @@
                         <winDirChooser>true</winDirChooser>
                         <winMenu>true</winMenu>
                         <winShortcut>true</winShortcut>
-                        <icon>src/main/resources/CardReader.ico</icon>
                         <licenseFile>../LICENSE</licenseFile>
+                        <icon>src/main/resources/${application.icon}</icon>
+                        <appVersion>${project.version}</appVersion>
                         <javaOptions>
                             <option>-Dfile.encoding=UTF-8</option>
                         </javaOptions>

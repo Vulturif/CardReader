@@ -13,7 +13,6 @@ import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
@@ -22,7 +21,6 @@ import net.vulturif.logic.CardReader;
 import net.vulturif.logic.Input;
 import net.vulturif.logic.Output;
 import net.vulturif.logic.Person;
-import net.vulturif.readerui.Launcher;
 import net.vulturif.readerui.PersonTableData;
 import net.vulturif.readerui.util.CellValueFactoryHelper;
 import net.vulturif.readerui.util.PrefHelper;
@@ -487,7 +485,7 @@ public class CardReaderUiController {
 
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
-        stage.getIcons().add(new Image(Objects.requireNonNull(Launcher.class.getClassLoader().getResourceAsStream("CardReader.png"))));
+        stage.getIcons().add(PrefHelper.getInstance().getIcon());
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
         stage.showAndWait();
@@ -505,7 +503,7 @@ public class CardReaderUiController {
 
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
-        stage.getIcons().add(new Image(Objects.requireNonNull(Launcher.class.getClassLoader().getResourceAsStream("CardReader.png"))));
+        stage.getIcons().add(PrefHelper.getInstance().getIcon());
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
         stage.showAndWait();

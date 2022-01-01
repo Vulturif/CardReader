@@ -3,11 +3,9 @@ package net.vulturif.readerui;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import net.vulturif.readerui.fxml.CardReaderUiController;
-
-import java.util.Objects;
+import net.vulturif.readerui.util.PrefHelper;
 
 public class Launcher extends Application {
     @Override
@@ -18,7 +16,7 @@ public class Launcher extends Application {
             stage.setMinHeight(750);
             stage.setMinWidth(1000);
             stage.setTitle("CardReader");
-            stage.getIcons().add(new Image(Objects.requireNonNull(Launcher.class.getClassLoader().getResourceAsStream("CardReader.png"))));
+            stage.getIcons().add(PrefHelper.getInstance().getIcon());
             stage.setScene(scene);
             ((CardReaderUiController) fxmlLoader.getController()).setHostService(getHostServices());
             stage.setOnHidden(e -> ((CardReaderUiController) fxmlLoader.getController()).shutdown());
