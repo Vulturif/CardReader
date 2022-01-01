@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.*?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.effect.Blend?>
 <?import javafx.scene.Group?>
@@ -200,15 +201,25 @@
                             <TableColumn fx:id="c8" prefWidth="75.0" text="StrasseNr" />
                             <TableColumn fx:id="c9" prefWidth="75.0" text="Adresszusatz" />
                             <TableColumn fx:id="c10" prefWidth="75.0" text="Telefon" />
-                            <TableColumn fx:id="c11" prefWidth="75.0" text="Email" />
-                            <TableColumn fx:id="c12" prefWidth="75.0" text="Briefkontakt" />
-                            <TableColumn fx:id="c13" prefWidth="75.0" text="Impfserie" />
-                            <TableColumn fx:id="c14" prefWidth="75.0" text="Charge" />
-                            <TableColumn fx:id="c15" prefWidth="75.0" text="Impfdatum" />
-                            <TableColumn fx:id="c16" prefWidth="75.0" text="Erstimpfung J und J" />
-                            <TableColumn fx:id="c17" prefWidth="75.0" text="Genesenen-Bescheinigung" />
+                            <TableColumn fx:id="c11" prefWidth="75.0" text="Email"/>
+                            <TableColumn fx:id="c12" prefWidth="75.0" text="Briefkontakt"/>
+                            <TableColumn fx:id="c13" prefWidth="75.0" text="Impfserie"/>
+                            <TableColumn fx:id="c14" prefWidth="75.0" text="Charge"/>
+                            <TableColumn fx:id="c15" prefWidth="75.0" text="Impfdatum"/>
+                            <TableColumn fx:id="c16" prefWidth="75.0" text="Erstimpfung J und J"/>
+                            <TableColumn fx:id="c17" prefWidth="75.0" text="Genesenen-Bescheinigung"/>
                         </columns>
                     </TableView>
+                </AnchorPane>
+            </Tab>
+            <Tab closable="false" text="Statistiken">
+                <AnchorPane>
+                    <children>
+                        <PieChart fx:id="pieGender" layoutX="158.0" layoutY="110.0" maxHeight="-Infinity"
+                                  maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+                                  prefWidth="400.0" title="Geschlecht" AnchorPane.leftAnchor="10.0"
+                                  AnchorPane.topAnchor="10.0"/>
+                    </children>
                 </AnchorPane>
             </Tab>
         </TabPane>
