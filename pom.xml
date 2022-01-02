@@ -6,16 +6,23 @@
 
     <groupId>net.exoa</groupId>
     <artifactId>CardReader</artifactId>
-    <version>1.1.5</version>
+    <version>1.1.7</version>
     <packaging>pom</packaging>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+
+        <application.icon>CardReader.ico</application.icon>
+        <application.png>CardReader.png</application.png>
+
+        <!--        <application.icon>CardReaderMalteser.ico</application.icon>-->
+        <!--        <application.png>CardReaderMalteser.png</application.png>-->
     </properties>
 
     <modules>
         <module>ReaderUI</module>
         <module>ReaderBL</module>
     </modules>
+
 </project>

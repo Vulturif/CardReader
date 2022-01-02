@@ -9,5 +9,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Java EE 6-Java EE 6 (2)" level="project" />
+    <orderEntry type="library" name="google.code.gson" level="project" />
   </component>
 </module>

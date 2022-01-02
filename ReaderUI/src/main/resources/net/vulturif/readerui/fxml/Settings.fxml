@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="settingsNode" prefHeight="200.0"
+            xmlns="http://javafx.com/javafx/11.0.2" fx:controller="net.vulturif.readerui.fxml.SettingsController">
+    <HBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="10.0" minWidth="500.0" AnchorPane.leftAnchor="10.0"
+          AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+        <Label text="Speicherort der CSV:">
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </padding>
+        </Label>
+        <TextField fx:id="tfFilepath" prefWidth="300.0">
+            <HBox.margin>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </HBox.margin>
+        </TextField>
+        <Button mnemonicParsing="false" onAction="#choosePath" text="Ändern">
+            <HBox.margin>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </HBox.margin>
+        </Button>
+    </HBox>
+    <ButtonBar layoutX="230.0" layoutY="360.0" prefHeight="40.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0"
+               AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+        <buttons>
+            <Button mnemonicParsing="false" onAction="#actionCancel" text="Abbrechen"/>
+            <Button mnemonicParsing="false" onAction="#actionOk" text="Ok"/>
+        </buttons>
+        <opaqueInsets>
+            <Insets/>
+        </opaqueInsets>
+    </ButtonBar>
+</AnchorPane>
