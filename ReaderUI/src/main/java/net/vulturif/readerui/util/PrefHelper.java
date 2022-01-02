@@ -12,10 +12,13 @@ import java.util.prefs.Preferences;
 public class PrefHelper {
 
     private static final PrefHelper helper = new PrefHelper();
+
+    public static final String CHECK_FOR_UPDATES = "checkForUpdates";
+    public static final String FILE_SAVE_PATH = "path_to_csv";
+
     private final Preferences prefs = Preferences.userNodeForPackage(Launcher.class);
     final Properties properties = new Properties();
 
-    String FILE_SAVE_PATH = "path_to_csv";
 
     private PrefHelper() {
         try {
@@ -50,5 +53,13 @@ public class PrefHelper {
 
     public Image getIcon() {
         return new Image(Objects.requireNonNull(PrefHelper.class.getClassLoader().getResourceAsStream(properties.getProperty("application.icon", "CardReader.png"))));
+    }
+
+    public boolean checkForUpdates() {
+        return prefs.getBoolean(CHECK_FOR_UPDATES, true);
+    }
+
+    public void setCheckForUpdates(boolean check) {
+        prefs.putBoolean(CHECK_FOR_UPDATES, check);
     }
 }
