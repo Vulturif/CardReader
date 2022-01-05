@@ -6,8 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="ReaderBL" />
-        <module name="ReaderUI" />
+        <module name="CardReader" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -20,7 +19,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="CardReader" options="--add-modules java.smartcardio" />
+      <module name="CardReader" options="" />
       <module name="ReaderBL" options="" />
       <module name="ReaderUI" options="" />
     </option>
