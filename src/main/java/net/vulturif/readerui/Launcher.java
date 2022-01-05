@@ -7,7 +7,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
-import net.vulturif.readerui.fxml.CardReaderUiController;
+import net.vulturif.readerui.controller.CardReaderUiController;
 import net.vulturif.util.PrefHelper;
 import net.vulturif.util.Updater;
 
@@ -29,7 +29,7 @@ public class Launcher extends Application {
         }
 
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxml/CardReaderUi.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("controller/CardReaderUi.controller"));
             Scene scene = new Scene(fxmlLoader.load(), 950, 700);
             stage.setMinHeight(750);
             stage.setMinWidth(1000);

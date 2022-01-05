@@ -1,4 +1,4 @@
-package net.vulturif.readerui.fxml;
+package net.vulturif.readerui.controller;
 
 import javafx.application.HostServices;
 import javafx.application.Platform;
@@ -481,7 +481,7 @@ public class CardReaderUiController {
     @FXML
     //TODO
     public void openSettings() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Settings.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Settings.controller"));
         Parent parent = fxmlLoader.load();
         ((SettingsController) fxmlLoader.getController()).setCurrentFilePath(filePath);
 
@@ -499,7 +499,7 @@ public class CardReaderUiController {
 
     @FXML
     public void openAbout() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("About.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("About.controller"));
         Parent parent = fxmlLoader.load();
         ((AboutController) fxmlLoader.getController()).setHostService(service);
 

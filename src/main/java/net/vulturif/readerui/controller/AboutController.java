@@ -1,4 +1,4 @@
-package net.vulturif.readerui.fxml;
+package net.vulturif.readerui.controller;
 
 import javafx.application.HostServices;
 import javafx.fxml.FXML;
