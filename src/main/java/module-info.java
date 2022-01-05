@@ -8,6 +8,7 @@ module net.vulturif {
     requires java.prefs;
     requires java.net.http;
     requires jdk.crypto.cryptoki;
+    requires org.apache.logging.log4j;
 
     opens net.vulturif.readerui to javafx.fxml;
     opens net.vulturif.readerui.fxml to javafx.fxml;

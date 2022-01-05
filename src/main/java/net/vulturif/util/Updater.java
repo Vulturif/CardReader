@@ -2,7 +2,10 @@ package net.vulturif.util;
 
 import com.google.gson.Gson;
 import javafx.concurrent.Task;
+import net.vulturif.logic.CardReader;
 import net.vulturif.shema.github.Release;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,8 +20,10 @@ import java.nio.file.StandardCopyOption;
 
 public class Updater {
 
-    String url = "https://api.github.com/repos/vulturif/CardReader/releases/latest";
-    Release release;
+    private static final Logger logger = LogManager.getLogger(CardReader.class);
+
+    private static final String url = "https://api.github.com/repos/vulturif/CardReader/releases/latest";
+    private Release release;
 
     public Updater() {
         try {
@@ -52,7 +57,7 @@ public class Updater {
                     e.printStackTrace();
                 }
 
-                System.out.println(cardReader.toFile().getAbsolutePath());
+                logger.debug(cardReader.toFile().getAbsolutePath());
                 new ProcessBuilder(cardReader.toFile().getAbsolutePath()).start();
                 System.exit(0);
                 return null;
