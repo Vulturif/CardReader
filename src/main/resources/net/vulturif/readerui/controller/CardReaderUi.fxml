@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" minHeight="-Infinity" minWidth="-Infinity"
             xmlns="http://javafx.com/javafx/11.0.2"
-            fx:controller="net.vulturif.readerui.controller.CardReaderUiController">
+            fx:controller="net.vulturif.readerui.controller.CardReaderUi">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <Menu mnemonicParsing="false" text="File">

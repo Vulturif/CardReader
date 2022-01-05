@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="settingsNode" prefHeight="200.0"
-            xmlns="http://javafx.com/javafx/11.0.2" fx:controller="net.vulturif.readerui.controller.SettingsController">
+            xmlns="http://javafx.com/javafx/11.0.2" fx:controller="net.vulturif.readerui.controller.Settings">
     <HBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="10.0" minWidth="500.0" AnchorPane.leftAnchor="10.0"
           AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
         <Label text="Speicherort der CSV:">

@@ -16,7 +16,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 
-public class SettingsController {
+public class Settings {
 
     String filePath;
     String newFilePath = "";

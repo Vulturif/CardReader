@@ -41,7 +41,7 @@ import java.util.concurrent.TimeUnit;
 import static net.vulturif.logic.Constants.*;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
-public class CardReaderUiController {
+public class CardReaderUi {
 
     @FXML
     private Label lblStatus;
@@ -153,7 +153,7 @@ public class CardReaderUiController {
     @FXML
     private PieChart pieGender;
 
-    public CardReaderUiController() {
+    public CardReaderUi() {
         buildTask();
         cardTerminals = reader.listTerminals();
         if (!cardTerminals.isEmpty()) {
@@ -481,9 +481,9 @@ public class CardReaderUiController {
     @FXML
     //TODO
     public void openSettings() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Settings.controller"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Settings.fxml"));
         Parent parent = fxmlLoader.load();
-        ((SettingsController) fxmlLoader.getController()).setCurrentFilePath(filePath);
+        ((Settings) fxmlLoader.getController()).setCurrentFilePath(filePath);
 
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
@@ -499,9 +499,9 @@ public class CardReaderUiController {
 
     @FXML
     public void openAbout() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("About.controller"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("About.fxml"));
         Parent parent = fxmlLoader.load();
-        ((AboutController) fxmlLoader.getController()).setHostService(service);
+        ((About) fxmlLoader.getController()).setHostService(service);
 
         Scene scene = new Scene(parent);
         Stage stage = new Stage();

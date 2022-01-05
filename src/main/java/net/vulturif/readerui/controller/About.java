@@ -7,7 +7,7 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import net.vulturif.util.PrefHelper;
 
-public class AboutController {
+public class About {
 
     @FXML
     private Button closeButton;
