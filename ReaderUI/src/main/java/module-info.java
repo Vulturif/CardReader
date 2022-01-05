@@ -7,14 +7,12 @@ module net.vulturif.readerui {
     requires com.dlsc.formsfx;
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
-    //requires eu.hansolo.tilesfx;
     requires net.vulturif;
     requires java.smartcardio;
     requires java.prefs;
     requires java.desktop;
-//    requires org.apache.httpcomponents.httpclient;
-//    requires org.apache.httpcomponents.httpcore;
     requires com.google.gson;
+    requires java.net.http;
 
     opens net.vulturif.readerui to javafx.fxml;
     opens net.vulturif.readerui.fxml to javafx.fxml;

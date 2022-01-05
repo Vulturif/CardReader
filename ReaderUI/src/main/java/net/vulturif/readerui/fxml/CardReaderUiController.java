@@ -20,10 +20,10 @@ import javafx.stage.Stage;
 import net.vulturif.logic.CardReader;
 import net.vulturif.logic.Input;
 import net.vulturif.logic.Output;
-import net.vulturif.logic.Person;
 import net.vulturif.readerui.PersonTableData;
 import net.vulturif.readerui.util.CellValueFactoryHelper;
 import net.vulturif.readerui.util.PrefHelper;
+import net.vulturif.shema.egk.Person;
 
 import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
@@ -246,14 +246,16 @@ public class CardReaderUiController {
         if (currentPerson == null) {
             return;
         }
+
+
         cbGender.setValue(currentPerson.getGeschlecht());
         tfFirstname.setText(currentPerson.getVorname());
-        tfName.setText(currentPerson.getName());
+        tfName.setText(currentPerson.getNachname());
         tfBirthDate.setText(rearrangeDate(currentPerson.getGeburtsdatum()));
-        tfPlz.setText(currentPerson.getPlz());
-        tfOrt.setText(currentPerson.getOrt());
-        tfStreet.setText(currentPerson.getStrasse());
-        tfHouseNumber.setText(currentPerson.getHausnummer());
+        tfPlz.setText(currentPerson.getStrassenAdresse().getPostleitzahl());
+        tfOrt.setText(currentPerson.getStrassenAdresse().getOrt());
+        tfStreet.setText(currentPerson.getStrassenAdresse().getStrasse());
+        tfHouseNumber.setText(currentPerson.getStrassenAdresse().getHausnummer());
     }
 
     @FXML
@@ -467,7 +469,7 @@ public class CardReaderUiController {
     }
 
     private String rearrangeDate(String date) {
-        String[] split = date.split("");
+        String[] split = String.valueOf(date).split("");
         return split[6] + split[7] + "." + split[4] + split[5] + "." + split[0] + split[1] + split[2] + split[3];
     }
 
