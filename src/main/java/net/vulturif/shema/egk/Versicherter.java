@@ -1,6 +1,5 @@
 package net.vulturif.shema.egk;
 
-
 public class Versicherter {
     public String Versicherten_ID;
     public Person Person;
@@ -13,11 +12,11 @@ public class Versicherter {
         Versicherten_ID = versicherten_ID;
     }
 
-    public net.vulturif.shema.egk.Person getPerson() {
+    public Person getPerson() {
         return Person;
     }
 
-    public void setPerson(net.vulturif.shema.egk.Person person) {
+    public void setPerson(Person person) {
         Person = person;
     }
 }

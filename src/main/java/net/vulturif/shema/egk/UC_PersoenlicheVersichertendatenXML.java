@@ -1,10 +1,8 @@
 package net.vulturif.shema.egk;
 
-import java.util.Date;
-
 public class UC_PersoenlicheVersichertendatenXML {
     public Versicherter Versicherter;
-    public Date CDM_VERSION;
+    public String CDM_VERSION;
     public String xmlns;
     public String text;
 
@@ -16,11 +14,11 @@ public class UC_PersoenlicheVersichertendatenXML {
         Versicherter = versicherter;
     }
 
-    public Date getCDM_VERSION() {
+    public String getCDM_VERSION() {
         return CDM_VERSION;
     }
 
-    public void setCDM_VERSION(Date CDM_VERSION) {
+    public void setCDM_VERSION(String CDM_VERSION) {
         this.CDM_VERSION = CDM_VERSION;
     }
 

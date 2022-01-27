@@ -9,6 +9,8 @@ module net.vulturif {
     requires java.net.http;
     requires jdk.crypto.cryptoki;
     requires org.apache.logging.log4j;
+    requires com.fasterxml.jackson.annotation;
+    requires com.fasterxml.jackson.databind;
 
     opens net.vulturif.readerui to javafx.fxml;
     opens net.vulturif.readerui.controller to javafx.fxml;

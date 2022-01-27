@@ -1,7 +1,9 @@
 package net.vulturif.logic;
 
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import net.vulturif.shema.egk.Person;
+import net.vulturif.shema.egk.UC_PersoenlicheVersichertendatenXML;
 import net.vulturif.shema.egk.Versicherter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -115,7 +117,11 @@ public class CardReader {
                 card.disconnect(false);
 
                 XmlMapper xmlMapper = new XmlMapper();
-                return xmlMapper.readValue(pd_data, Versicherter.class).getPerson();
+                try {
+                    return xmlMapper.readValue(pd_data, UC_PersoenlicheVersichertendatenXML.class).getVersicherter().getPerson();
+                } catch (UnrecognizedPropertyException e) {
+                    return xmlMapper.readValue(pd_data, Versicherter.class).getPerson();
+                }
             }
         } catch (CardException | IOException e) {
             e.printStackTrace();
